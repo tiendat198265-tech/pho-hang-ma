@@ -52,6 +52,7 @@ export default function BannerDisplay({
   } = banner;
 
   const containerRef = useRef(null);
+  const videoRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
   const dragStartRef = useRef({ startX: 0, startY: 0, posX: 0, posY: 0 });
   const [isMuted, setIsMuted] = useState(videoMuted !== false);
@@ -59,6 +60,19 @@ export default function BannerDisplay({
   useEffect(() => {
     setIsMuted(videoMuted !== false);
   }, [videoMuted]);
+
+  // Video playback management: pause when inactive to save GPU/CPU cycles and prevent lag
+  useEffect(() => {
+    if (!videoRef.current) return;
+    if (isActive) {
+      const playPromise = videoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {});
+      }
+    } else {
+      videoRef.current.pause();
+    }
+  }, [isActive]);
 
   // Determine active video & image
   const activeVideo =
@@ -229,16 +243,22 @@ export default function BannerDisplay({
       } ${className}`}
       onWheel={handleWheel}
     >
-      {/* 1. Nền mờ nghệ thuật nếu bật */}
+      {/* 1. Nền mờ nghệ thuật nếu bật - tối ưu GPU rasterization */}
       {bgStyle === 'blur' && activeImage && (
         <div
-          className="absolute inset-0 w-full h-full overflow-hidden filter blur-2xl scale-110 opacity-60 pointer-events-none"
-          style={{
-            backgroundImage: `url(${activeImage})`,
-            backgroundPosition: 'center',
-            backgroundSize: 'cover',
-          }}
-        />
+          className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none"
+          style={{ willChange: 'transform, opacity', transform: 'translateZ(0)' }}
+        >
+          <div
+            className="w-full h-full filter blur-xl scale-110 opacity-50"
+            style={{
+              backgroundImage: `url(${activeImage})`,
+              backgroundPosition: 'center',
+              backgroundSize: 'cover',
+              transform: 'translateZ(0)',
+            }}
+          />
+        </div>
       )}
 
       {/* 2. Vùng ảnh chính với khả năng kéo thả nếu interactive */}
@@ -260,61 +280,44 @@ export default function BannerDisplay({
       >
         {isVideo && youTubeId ? (
           <div className="w-full h-full relative overflow-hidden pointer-events-none flex items-center justify-center">
-            <iframe
-              className="w-[120%] h-[120%] absolute pointer-events-none"
-              src={`https://www.youtube.com/embed/${youTubeId}?autoplay=1&mute=1&loop=1&playlist=${youTubeId}&controls=0&showinfo=0&rel=0&modestbranding=1`}
-              title={title || 'Banner Video'}
-              allow="autoplay; encrypted-media"
-              allowFullScreen
-            />
+            {isActive && (
+              <iframe
+                className="w-[120%] h-[120%] absolute pointer-events-none"
+                src={`https://www.youtube.com/embed/${youTubeId}?autoplay=1&mute=1&loop=1&playlist=${youTubeId}&controls=0&showinfo=0&rel=0&modestbranding=1`}
+                title={title || 'Banner Video'}
+                allow="autoplay; encrypted-media"
+                allowFullScreen
+              />
+            )}
           </div>
         ) : isVideo && activeVideo ? (
-          <video
-            key={activeVideo}
-            src={activeVideo}
-            poster={activeImage || undefined}
-            autoPlay={videoAutoplay !== false}
-            muted={isMuted}
-            loop={videoLoop !== false}
-            playsInline
+          <div
+            className="w-full h-full overflow-hidden flex items-center justify-center"
             style={{
-              transform: `translate(${positionX}px, ${positionY}px) scale(${zoomX / 100}, ${
+              transform: `translate3d(${positionX}px, ${positionY}px, 0) scale(${zoomX / 100}, ${
                 zoomY / 100
               })`,
               transformOrigin: focalPoint || 'center',
-              objectFit: fitMode || 'cover',
+              willChange: isInteractive ? 'transform' : 'auto',
             }}
-            className={`w-full h-full pointer-events-none select-none ${
-              isInteractive ? 'transition-transform duration-75' : ''
-            } ${
-              fitMode === 'contain'
-                ? 'object-contain'
-                : fitMode === 'fill'
-                ? 'object-fill'
-                : 'object-cover'
-            }`}
-          />
-        ) : activeImage ? (
-          <picture className="w-full h-full block">
-            {/* Tự động switch ảnh mobile trên màn hình thực tế của khách hàng nếu không ở chế độ giả lập device */}
-            {!isLivePreview && mobileImageUrl && (
-              <source media="(max-width: 768px)" srcSet={mobileImageUrl} />
-            )}
-            <img
-              src={activeImage}
-              alt={title || 'Phố Hàng Mã Banner'}
-              draggable={false}
+          >
+            <video
+              ref={videoRef}
+              key={activeVideo}
+              src={activeVideo}
+              poster={activeImage || undefined}
+              autoPlay={videoAutoplay !== false}
+              muted={isMuted}
+              loop={videoLoop !== false}
+              playsInline
+              preload="auto"
               style={{
-                transform: `translate(${positionX}px, ${positionY}px) scale(${zoomX / 100}, ${
-                  zoomY / 100
-                })`,
-                transformOrigin: focalPoint || 'center',
-                objectFit: fitMode || 'cover',
+                willChange: 'transform',
+                transform: 'translateZ(0)',
+                backfaceVisibility: 'hidden',
               }}
               className={`w-full h-full pointer-events-none select-none ${
-                isInteractive
-                  ? 'transition-transform duration-75'
-                  : 'transition-all duration-1000 ease-out animate-ken-burns'
+                isInteractive ? 'transition-transform duration-75' : ''
               } ${
                 fitMode === 'contain'
                   ? 'object-contain'
@@ -323,7 +326,48 @@ export default function BannerDisplay({
                   : 'object-cover'
               }`}
             />
-          </picture>
+          </div>
+        ) : activeImage ? (
+          <div
+            className="w-full h-full overflow-hidden flex items-center justify-center"
+            style={{
+              transform: `translate3d(${positionX}px, ${positionY}px, 0) scale(${zoomX / 100}, ${
+                zoomY / 100
+              })`,
+              transformOrigin: focalPoint || 'center',
+              willChange: isInteractive ? 'transform' : 'auto',
+            }}
+          >
+            <picture className="w-full h-full block">
+              {/* Tự động switch ảnh mobile trên màn hình thực tế của khách hàng nếu không ở chế độ giả lập device */}
+              {!isLivePreview && mobileImageUrl && (
+                <source media="(max-width: 768px)" srcSet={mobileImageUrl} />
+              )}
+              <img
+                src={activeImage}
+                alt={title || 'Phố Hàng Mã Banner'}
+                draggable={false}
+                style={{
+                  willChange: 'transform',
+                  transform: 'translateZ(0)',
+                  backfaceVisibility: 'hidden',
+                }}
+                className={`w-full h-full pointer-events-none select-none ${
+                  isInteractive
+                    ? 'transition-transform duration-75'
+                    : 'transition-transform duration-[7000ms] ease-out'
+                } ${
+                  isActive && !isInteractive ? 'scale-105' : 'scale-100'
+                } ${
+                  fitMode === 'contain'
+                    ? 'object-contain'
+                    : fitMode === 'fill'
+                    ? 'object-fill'
+                    : 'object-cover'
+                }`}
+              />
+            </picture>
+          </div>
         ) : isInteractive || isLivePreview ? (
           <div className="flex flex-col items-center justify-center text-white/40 gap-2 p-4 text-center">
             <span className="text-sm font-light">Chưa có hình ảnh hoặc video banner</span>

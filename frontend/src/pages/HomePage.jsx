@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowRight,
@@ -22,11 +22,59 @@ export default function HomePage() {
   const [heroBanners, setHeroBanners] = useState([]);
   const [middleBanners, setMiddleBanners] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [prevSlide, setPrevSlide] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const [templates, setTemplates] = useState([]);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isPaused, setIsPaused] = useState(false);
+
+  const transitionTimerRef = useRef(null);
+  const touchStartXRef = useRef(0);
+  const touchDeltaXRef = useRef(0);
+
+  // Transition controller that guarantees zero stutter / blank frames
+  const goToSlide = (nextIdx) => {
+    if (nextIdx === currentSlide || heroBanners.length <= 1) return;
+    if (transitionTimerRef.current) clearTimeout(transitionTimerRef.current);
+
+    setPrevSlide(currentSlide);
+    setCurrentSlide(nextIdx);
+    setIsTransitioning(true);
+
+    transitionTimerRef.current = setTimeout(() => {
+      setIsTransitioning(false);
+    }, 750);
+  };
+
+  const handleNextSlide = () => {
+    goToSlide((currentSlide + 1) % heroBanners.length);
+  };
+
+  const handlePrevSlide = () => {
+    goToSlide(currentSlide === 0 ? heroBanners.length - 1 : currentSlide - 1);
+  };
+
+  // Touch Swipe for mobile devices
+  const handleTouchStart = (e) => {
+    touchStartXRef.current = e.touches[0].clientX;
+    touchDeltaXRef.current = 0;
+    setIsPaused(true);
+  };
+
+  const handleTouchMove = (e) => {
+    touchDeltaXRef.current = e.touches[0].clientX - touchStartXRef.current;
+  };
+
+  const handleTouchEnd = () => {
+    setIsPaused(false);
+    if (touchDeltaXRef.current > 45) {
+      handlePrevSlide();
+    } else if (touchDeltaXRef.current < -45) {
+      handleNextSlide();
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -65,10 +113,22 @@ export default function HomePage() {
   useEffect(() => {
     if (heroBanners.length <= 1 || isPaused) return;
     const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % heroBanners.length);
+      handleNextSlide();
     }, 6000);
     return () => clearInterval(interval);
-  }, [heroBanners.length, isPaused]);
+  }, [heroBanners.length, isPaused, currentSlide]);
+
+  // Preload next banner image in background to ensure zero lag
+  useEffect(() => {
+    if (heroBanners.length <= 1) return;
+    const nextIdx = (currentSlide + 1) % heroBanners.length;
+    const nextBanner = heroBanners[nextIdx];
+    const nextImgUrl = nextBanner?.imageUrl || nextBanner?.mobileImageUrl;
+    if (nextImgUrl && nextBanner?.mediaType !== 'video') {
+      const img = new Image();
+      img.src = nextImgUrl;
+    }
+  }, [currentSlide, heroBanners]);
 
   const activeBanner = heroBanners[currentSlide] || null;
 
@@ -96,17 +156,29 @@ export default function HomePage() {
           className="w-full h-[420px] sm:h-[520px] lg:h-[630px] relative overflow-hidden bg-[#1E120D] select-none group"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
         >
-          {/* Stacked Slides with Ultra-smooth Cross-fade & Ken Burns effect */}
+          {/* Stacked Slides with Hardware-accelerated Silky Cross-fade */}
           {heroBanners.map((banner, idx) => {
             const isCurrent = currentSlide === idx;
+            const isPrevious = prevSlide === idx && isTransitioning;
+
             return (
               <div
                 key={banner._id || idx}
-                className={`absolute inset-0 w-full h-full transition-all duration-1000 ease-in-out ${
+                style={{
+                  willChange: isCurrent || isPrevious ? 'opacity' : 'auto',
+                  transform: 'translateZ(0)',
+                  backfaceVisibility: 'hidden',
+                }}
+                className={`absolute inset-0 w-full h-full transition-opacity duration-700 ease-out ${
                   isCurrent
-                    ? 'opacity-100 z-10 pointer-events-auto scale-100'
-                    : 'opacity-0 z-0 pointer-events-none scale-105'
+                    ? 'opacity-100 z-20 pointer-events-auto visible'
+                    : isPrevious
+                    ? 'opacity-100 z-10 pointer-events-none visible'
+                    : 'opacity-0 z-0 pointer-events-none invisible'
                 }`}
               >
                 <BannerDisplay
@@ -124,9 +196,7 @@ export default function HomePage() {
           {heroBanners.length > 1 && (
             <>
               <button
-                onClick={() =>
-                  setCurrentSlide((prev) => (prev === 0 ? heroBanners.length - 1 : prev - 1))
-                }
+                onClick={handlePrevSlide}
                 className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-black/40 hover:bg-[#8B1E21] text-white border border-white/20 hover:border-[#C59B27] backdrop-blur-md flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 shadow-2xl opacity-80 hover:opacity-100"
                 title="Banner trước"
                 aria-label="Previous slide"
@@ -135,7 +205,7 @@ export default function HomePage() {
               </button>
 
               <button
-                onClick={() => setCurrentSlide((prev) => (prev + 1) % heroBanners.length)}
+                onClick={handleNextSlide}
                 className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-black/40 hover:bg-[#8B1E21] text-white border border-white/20 hover:border-[#C59B27] backdrop-blur-md flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 shadow-2xl opacity-80 hover:opacity-100"
                 title="Banner tiếp"
                 aria-label="Next slide"
@@ -150,7 +220,7 @@ export default function HomePage() {
                   return (
                     <button
                       key={idx}
-                      onClick={() => setCurrentSlide(idx)}
+                      onClick={() => goToSlide(idx)}
                       className={`h-2 transition-all duration-500 rounded-full relative overflow-hidden focus:outline-none ${
                         isCurrent
                           ? 'w-12 sm:w-16 bg-white/25 shadow-[0_0_12px_rgba(197,155,39,0.6)]'
@@ -161,10 +231,11 @@ export default function HomePage() {
                       {isCurrent && (
                         <span
                           key={`progress-${currentSlide}-${isPaused}`}
-                          className="absolute inset-y-0 left-0 bg-gradient-to-r from-[#C59B27] to-[#E5C158] rounded-full"
+                          className="absolute inset-0 bg-gradient-to-r from-[#C59B27] to-[#E5C158] rounded-full origin-left"
                           style={{
                             animation: `slideProgress 6000ms linear forwards`,
                             animationPlayState: isPaused ? 'paused' : 'running',
+                            willChange: 'transform',
                           }}
                         />
                       )}

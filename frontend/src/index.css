@@ -140,8 +140,8 @@
 
 /* Luxury Banner Slider Animations */
 @keyframes slideProgress {
-  0% { width: 0%; }
-  100% { width: 100%; }
+  0% { transform: scaleX(0); }
+  100% { transform: scaleX(1); }
 }
 
 @keyframes goldShimmer {
