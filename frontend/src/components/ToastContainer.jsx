@@ -39,7 +39,7 @@ export default function ToastContainer() {
           <div
             key={id}
             role="alert"
-            className={`pointer-events-auto flex items-start gap-3 p-3.5 rounded-lg border shadow-xl ${borderColor} ${bgStyle} transition-all duration-300 transform translate-y-0 opacity-100 backdrop-blur-xs`}
+            className={`pointer-events-auto flex items-start gap-3 p-3.5 rounded-lg border shadow-xl ${borderColor} ${bgStyle} animate-toast backdrop-blur-xs`}
             style={{
               boxShadow: '0 8px 24px -4px rgba(62, 39, 35, 0.15), 0 2px 6px -1px rgba(0,0,0,0.06)',
             }}

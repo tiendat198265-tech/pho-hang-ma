@@ -39,6 +39,129 @@
   }
 }
 
+/* ==========================================================================
+   UNIFIED LUXURY MOTION SYSTEM (Phố Hàng Mã Editorial & Heritage Aesthetic)
+   Timing Scale:
+   - Micro-interactions (click, button press, icon): 120ms - 180ms
+   - Hover states (card, link, button hover): 180ms - 220ms
+   - Dropdown / Popover / Tooltip: 180ms - 240ms
+   - Modal / Drawer: 240ms - 300ms
+   - Page Transition: 260ms - 320ms
+   Easing: cubic-bezier(0.16, 1, 0.3, 1) [Luxury soft deceleration]
+   ========================================================================== */
+
+:root {
+  --ease-out-luxury: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Page Transition */
+@keyframes pageEnter {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 4px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.animate-page-enter {
+  animation: pageEnter 280ms var(--ease-out-luxury) forwards;
+  will-change: opacity, transform;
+}
+
+/* Standard FadeIn (for alerts, banners, badges) */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 200ms var(--ease-out-luxury) forwards;
+}
+
+/* Modal / Dialog ScaleIn */
+@keyframes modalScaleIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.97) translate3d(0, 6px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+}
+
+.animate-scaleUp,
+.animate-zoomIn,
+.animate-modal {
+  animation: modalScaleIn 250ms var(--ease-out-luxury) forwards;
+  will-change: opacity, transform;
+}
+
+/* Dropdown Menu Slide & Fade */
+@keyframes dropdownFade {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -4px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.animate-dropdown {
+  animation: dropdownFade 200ms var(--ease-out-luxury) forwards;
+  will-change: opacity, transform;
+}
+
+/* Mobile Drawer Slide Down */
+@keyframes drawerSlideDown {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -8px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.animate-drawer-down {
+  animation: drawerSlideDown 240ms var(--ease-out-luxury) forwards;
+  will-change: opacity, transform;
+}
+
+/* Toast Slide In */
+@keyframes toastSlideIn {
+  0% {
+    opacity: 0;
+    transform: translate3d(16px, 0, 0) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+.animate-toast {
+  animation: toastSlideIn 240ms var(--ease-out-luxury) forwards;
+  will-change: opacity, transform;
+}
+
+/* Micro-blur helper (fallback for backdrop-blur-xs) */
+.backdrop-blur-xs {
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+}
+
 .seal-badge {
   display: inline-flex;
   align-items: center;
@@ -54,6 +177,7 @@
   border-radius: 3px;
 }
 
+/* Buttons */
 .btn-primary {
   background-color: #8B1E21;
   color: #FAF7F2;
@@ -64,18 +188,25 @@
   font-weight: 500;
   letter-spacing: 0.02em;
   padding: 10px 20px;
-  transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  transform: translateZ(0);
+  transition: transform 160ms var(--ease-out-luxury), background-color 180ms ease, box-shadow 180ms ease;
+  will-change: transform;
 }
+
 .btn-primary:hover {
   background-color: #9E2A2B;
-  box-shadow: 0 2px 8px rgba(139, 30, 33, 0.25);
+  transform: translate3d(0, -1px, 0);
+  box-shadow: 0 4px 12px rgba(139, 30, 33, 0.28);
 }
+
 .btn-primary:active {
   background-color: #5E1315;
+  transform: translate3d(0, 0, 0) scale(0.985);
+  box-shadow: 0 1px 4px rgba(139, 30, 33, 0.2);
 }
 
 .btn-secondary {
@@ -87,27 +218,40 @@
   font-size: 14px;
   font-weight: 500;
   padding: 10px 20px;
-  transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  transform: translateZ(0);
+  transition: transform 160ms var(--ease-out-luxury), background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+  will-change: transform;
 }
+
 .btn-secondary:hover {
   background-color: #F9F4E8;
   color: #8B1E21;
   border-color: #8B1E21;
+  transform: translate3d(0, -1px, 0);
 }
 
+.btn-secondary:active {
+  transform: translate3d(0, 0, 0) scale(0.985);
+}
+
+/* Cards */
 .card-frame {
   background-color: #FFFFFF;
   border: 1px solid #E6DFD5;
   border-radius: 4px;
-  transition: all 0.25s ease;
+  transform: translateZ(0);
+  transition: transform 220ms var(--ease-out-luxury), box-shadow 220ms var(--ease-out-luxury), border-color 200ms ease;
+  will-change: transform;
 }
+
 .card-frame:hover {
   border-color: #C59B27;
-  box-shadow: 0 4px 16px -2px rgba(62, 39, 35, 0.06), 0 1px 3px 0 rgba(62, 39, 35, 0.04);
+  transform: translate3d(0, -2px, 0);
+  box-shadow: 0 8px 24px -4px rgba(62, 39, 35, 0.08), 0 2px 6px 0 rgba(62, 39, 35, 0.04);
 }
 
 /* Print Styles for Invoices */
@@ -138,7 +282,7 @@
   }
 }
 
-/* Luxury Banner Slider Animations */
+/* Banner Slider & Shimmer Keyframes */
 @keyframes slideProgress {
   0% { transform: scaleX(0); }
   100% { transform: scaleX(1); }
@@ -161,6 +305,20 @@
 
 .animate-ken-burns {
   animation: kenBurnsSubtle 16s ease-in-out infinite alternate;
+}
+
+/* ==========================================================================
+   PREFERS-REDUCED-MOTION SUPPORT
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 

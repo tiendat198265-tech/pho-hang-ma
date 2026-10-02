@@ -176,7 +176,7 @@ export default function Navbar() {
 
           {/* Instant Search Results Dropdown */}
           {showDropdown && searchTerm.trim() && (
-            <div className="absolute left-0 right-0 top-full mt-1.5 bg-white border border-[#E6DFD5] rounded-lg shadow-2xl z-50 overflow-hidden max-h-[460px] flex flex-col animate-in fade-in duration-150">
+            <div className="absolute left-0 right-0 top-full mt-1.5 bg-white border border-[#E6DFD5] rounded-lg shadow-2xl z-50 overflow-hidden max-h-[460px] flex flex-col animate-dropdown">
               <div className="overflow-y-auto p-2 space-y-3 custom-scrollbar">
                 {/* 1. Category suggestions */}
                 {suggestions.categories.length > 0 && (
@@ -344,8 +344,8 @@ export default function Navbar() {
                 </span>
               </button>
 
-              {/* Dropdown Menu - Seamless Hover & Bridge */}
-              <div className="absolute right-0 top-full pt-1.5 w-56 hidden group-hover:block z-50 animate-in fade-in duration-150">
+              {/* Dropdown Menu - Seamless Smooth Hover & Bridge */}
+              <div className="absolute right-0 top-full pt-1.5 w-56 z-50 transition-all duration-200 ease-out opacity-0 pointer-events-none translate-y-1 group-hover:opacity-100 group-hover:pointer-events-auto group-hover:translate-y-0">
                 <div className="bg-white border border-[#E6DFD5] shadow-lg rounded-[6px] py-1.5 overflow-hidden">
                   <div className="px-3.5 py-2 border-b border-[#E6DFD5] bg-[#FAF7F2] flex items-center gap-2.5">
                     {user.avatar ? (
@@ -518,7 +518,7 @@ export default function Navbar() {
 
       {/* MOBILE DRAWER */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-white border-t border-[#E6DFD5] px-4 py-3 space-y-3">
+        <div className="lg:hidden bg-white border-t border-[#E6DFD5] px-4 py-3 space-y-3 animate-drawer-down">
           <div ref={mobileSearchRef} className="relative">
             <form onSubmit={handleSearch} className="relative">
               <input
@@ -538,7 +538,7 @@ export default function Navbar() {
 
             {/* Mobile search dropdown */}
             {showDropdown && searchTerm.trim() && (
-              <div className="absolute left-0 right-0 top-full mt-1 bg-white border border-[#E6DFD5] rounded-lg shadow-xl z-50 overflow-hidden max-h-[350px] flex flex-col">
+              <div className="absolute left-0 right-0 top-full mt-1 bg-white border border-[#E6DFD5] rounded-lg shadow-xl z-50 overflow-hidden max-h-[350px] flex flex-col animate-dropdown">
                 <div className="overflow-y-auto p-2 space-y-2.5 custom-scrollbar">
                   {suggestions.categories.length > 0 && (
                     <div className="flex flex-wrap gap-1 px-1">

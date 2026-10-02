@@ -278,7 +278,8 @@ export default function HomePage() {
                   <img
                     src={cat.image || 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=400&q=80'}
                     alt={cat.name}
-                    className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-300"
+                    className="w-full h-full object-cover group-hover:scale-104 transition-transform duration-300 ease-out"
+                    style={{ transform: 'translateZ(0)' }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>

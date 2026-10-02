@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { SettingsProvider } from './context/SettingsContext';
@@ -43,6 +43,35 @@ function RouteLoadingFallback() {
   );
 }
 
+function PageRoutes() {
+  const location = useLocation();
+  return (
+    <div key={location.pathname} className="animate-page-enter">
+      <Routes location={location}>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/bo-mau" element={<TemplatesPage />} />
+        <Route path="/bo-mau/:slug" element={<TemplateDetailPage />} />
+        <Route path="/tuy-chinh-mau" element={<TemplateCustomizerPage />} />
+        <Route path="/tuy-chinh-mau/:slug" element={<TemplateCustomizerPage />} />
+        <Route path="/xac-nhan-bao-gia/:code" element={<CustomOrderQuotePage />} />
+        <Route path="/tra-cuu-bao-gia" element={<CustomOrderQuotePage />} />
+        <Route path="/tra-cuu-bao-gia/:code" element={<CustomOrderQuotePage />} />
+        <Route path="/san-pham" element={<ProductsPage />} />
+        <Route path="/san-pham/:slug" element={<ProductDetailPage />} />
+        <Route path="/gio-hang" element={<CartPage />} />
+        <Route path="/thanh-toan" element={<CheckoutPage />} />
+        <Route path="/don-hang/:code" element={<OrderDetailPage />} />
+        <Route path="/dang-nhap" element={<LoginPage />} />
+        <Route path="/dang-ky" element={<RegisterPage />} />
+        <Route path="/tai-khoan" element={<AccountPage />} />
+        <Route path="/lich-su-don" element={<OrderHistoryPage />} />
+        <Route path="/admin" element={<AdminDashboardPage />} />
+        <Route path="*" element={<HomePage />} />
+      </Routes>
+    </div>
+  );
+}
+
 export default function App() {
   // Bật lớp bảo vệ bề mặt chống soi F12 & chuột phải
   useAntiDevTools();
@@ -58,27 +87,7 @@ export default function App() {
                 <Navbar />
                 <main className="flex-1">
                   <Suspense fallback={<RouteLoadingFallback />}>
-                    <Routes>
-                      <Route path="/" element={<HomePage />} />
-                      <Route path="/bo-mau" element={<TemplatesPage />} />
-                      <Route path="/bo-mau/:slug" element={<TemplateDetailPage />} />
-                      <Route path="/tuy-chinh-mau" element={<TemplateCustomizerPage />} />
-                      <Route path="/tuy-chinh-mau/:slug" element={<TemplateCustomizerPage />} />
-                      <Route path="/xac-nhan-bao-gia/:code" element={<CustomOrderQuotePage />} />
-                      <Route path="/tra-cuu-bao-gia" element={<CustomOrderQuotePage />} />
-                      <Route path="/tra-cuu-bao-gia/:code" element={<CustomOrderQuotePage />} />
-                      <Route path="/san-pham" element={<ProductsPage />} />
-                      <Route path="/san-pham/:slug" element={<ProductDetailPage />} />
-                      <Route path="/gio-hang" element={<CartPage />} />
-                      <Route path="/thanh-toan" element={<CheckoutPage />} />
-                      <Route path="/don-hang/:code" element={<OrderDetailPage />} />
-                      <Route path="/dang-nhap" element={<LoginPage />} />
-                      <Route path="/dang-ky" element={<RegisterPage />} />
-                      <Route path="/tai-khoan" element={<AccountPage />} />
-                      <Route path="/lich-su-don" element={<OrderHistoryPage />} />
-                      <Route path="/admin" element={<AdminDashboardPage />} />
-                      <Route path="*" element={<HomePage />} />
-                    </Routes>
+                    <PageRoutes />
                   </Suspense>
                 </main>
                 <Footer />
