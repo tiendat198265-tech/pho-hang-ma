@@ -138,3 +138,29 @@
   }
 }
 
+/* Luxury Banner Slider Animations */
+@keyframes slideProgress {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+
+@keyframes goldShimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
+@keyframes kenBurnsSubtle {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.animate-gold-shimmer {
+  animation: goldShimmer 2.4s infinite ease-in-out;
+}
+
+.animate-ken-burns {
+  animation: kenBurnsSubtle 16s ease-in-out infinite alternate;
+}
+
+

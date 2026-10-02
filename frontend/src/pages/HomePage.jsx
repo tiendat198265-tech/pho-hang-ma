@@ -76,23 +76,49 @@ export default function HomePage() {
     <div className="w-full bg-[#FAF7F2] min-h-screen">
       {/* 1. HERO SLIDER SECTION (TRÀN VIỀN - TỐI GIẢN - TÔN VINH ẢNH BANNER NGUYÊN BẢN) */}
       {loading ? (
-        <section className="w-full h-[420px] sm:h-[520px] lg:h-[630px] bg-[#1E120D] relative overflow-hidden flex items-center justify-center select-none">
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse" />
-          <div className="relative z-10 flex flex-col items-center gap-3">
-            <div className="w-8 h-8 rounded-full border-2 border-[#C59B27] border-t-transparent animate-spin" />
+        <section className="w-full h-[420px] sm:h-[520px] lg:h-[630px] bg-[#1E120D] relative overflow-hidden flex items-end p-6 sm:p-10 lg:p-14 select-none">
+          {/* Subtle moving gold ray shimmer */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#C59B27]/15 to-transparent -translate-x-full animate-gold-shimmer pointer-events-none" />
+          
+          {/* Shimmering luxury placeholder blocks */}
+          <div className="max-w-2xl space-y-3 z-10 w-full animate-pulse">
+            <div className="h-6 w-32 bg-[#C59B27]/25 rounded-sm" />
+            <div className="h-10 sm:h-12 w-3/4 bg-white/10 rounded-sm" />
+            <div className="h-4 sm:h-5 w-2/3 bg-white/10 rounded-sm" />
+            <div className="pt-2 flex gap-3">
+              <div className="h-10 w-36 bg-[#8B1E21]/50 rounded-[4px]" />
+              <div className="h-10 w-32 bg-white/15 rounded-[4px]" />
+            </div>
           </div>
         </section>
-      ) : heroBanners.length > 0 && activeBanner ? (
+      ) : heroBanners.length > 0 ? (
         <section
-          className="w-full relative overflow-hidden bg-[#1E120D] transition-all duration-700 select-none group"
+          className="w-full h-[420px] sm:h-[520px] lg:h-[630px] relative overflow-hidden bg-[#1E120D] select-none group"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
-          <BannerDisplay
-            banner={activeBanner}
-            isInteractive={false}
-            isLivePreview={false}
-          />
+          {/* Stacked Slides with Ultra-smooth Cross-fade & Ken Burns effect */}
+          {heroBanners.map((banner, idx) => {
+            const isCurrent = currentSlide === idx;
+            return (
+              <div
+                key={banner._id || idx}
+                className={`absolute inset-0 w-full h-full transition-all duration-1000 ease-in-out ${
+                  isCurrent
+                    ? 'opacity-100 z-10 pointer-events-auto scale-100'
+                    : 'opacity-0 z-0 pointer-events-none scale-105'
+                }`}
+              >
+                <BannerDisplay
+                  banner={banner}
+                  isInteractive={false}
+                  isLivePreview={false}
+                  heightClassOverride="h-full w-full"
+                  isActive={isCurrent}
+                />
+              </div>
+            );
+          })}
 
           {/* Floating Left/Right Arrows on Screen Edges */}
           {heroBanners.length > 1 && (
@@ -101,36 +127,50 @@ export default function HomePage() {
                 onClick={() =>
                   setCurrentSlide((prev) => (prev === 0 ? heroBanners.length - 1 : prev - 1))
                 }
-                className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-black/40 hover:bg-[#8B1E21] text-white border border-white/20 backdrop-blur-md flex items-center justify-center transition-all hover:scale-110 shadow-2xl"
+                className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-black/40 hover:bg-[#8B1E21] text-white border border-white/20 hover:border-[#C59B27] backdrop-blur-md flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 shadow-2xl opacity-80 hover:opacity-100"
                 title="Banner trước"
                 aria-label="Previous slide"
               >
-                <ChevronLeft size={22} />
+                <ChevronLeft size={22} className="transition-transform duration-300 group-hover:-translate-x-0.5" />
               </button>
 
               <button
                 onClick={() => setCurrentSlide((prev) => (prev + 1) % heroBanners.length)}
-                className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-black/40 hover:bg-[#8B1E21] text-white border border-white/20 backdrop-blur-md flex items-center justify-center transition-all hover:scale-110 shadow-2xl"
+                className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-black/40 hover:bg-[#8B1E21] text-white border border-white/20 hover:border-[#C59B27] backdrop-blur-md flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 shadow-2xl opacity-80 hover:opacity-100"
                 title="Banner tiếp"
                 aria-label="Next slide"
               >
-                <ChevronRight size={22} />
+                <ChevronRight size={22} className="transition-transform duration-300 group-hover:translate-x-0.5" />
               </button>
 
-              {/* Bottom Slider Indicators */}
+              {/* Bottom Slider Indicators with Luxury Progress Pills */}
               <div className="absolute bottom-5 sm:bottom-7 inset-x-0 z-30 flex items-center justify-center gap-2.5">
-                {heroBanners.map((_, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setCurrentSlide(idx)}
-                    className={`h-2 transition-all duration-300 rounded-full ${
-                      currentSlide === idx
-                        ? 'w-10 sm:w-12 bg-[#C59B27] shadow-lg'
-                        : 'w-2.5 bg-white/40 hover:bg-white/70'
-                    }`}
-                    aria-label={`Chuyển đến Slide ${idx + 1}`}
-                  />
-                ))}
+                {heroBanners.map((_, idx) => {
+                  const isCurrent = currentSlide === idx;
+                  return (
+                    <button
+                      key={idx}
+                      onClick={() => setCurrentSlide(idx)}
+                      className={`h-2 transition-all duration-500 rounded-full relative overflow-hidden focus:outline-none ${
+                        isCurrent
+                          ? 'w-12 sm:w-16 bg-white/25 shadow-[0_0_12px_rgba(197,155,39,0.6)]'
+                          : 'w-2.5 bg-white/40 hover:bg-white/70 hover:w-5'
+                      }`}
+                      aria-label={`Chuyển đến Slide ${idx + 1}`}
+                    >
+                      {isCurrent && (
+                        <span
+                          key={`progress-${currentSlide}-${isPaused}`}
+                          className="absolute inset-y-0 left-0 bg-gradient-to-r from-[#C59B27] to-[#E5C158] rounded-full"
+                          style={{
+                            animation: `slideProgress 6000ms linear forwards`,
+                            animationPlayState: isPaused ? 'paused' : 'running',
+                          }}
+                        />
+                      )}
+                    </button>
+                  );
+                })}
               </div>
             </>
           )}

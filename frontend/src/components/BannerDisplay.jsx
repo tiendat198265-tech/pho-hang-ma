@@ -18,6 +18,7 @@ export default function BannerDisplay({
   heightClassOverride,
   showDragHint = true,
   className = '',
+  isActive = true,
 }) {
   const {
     title = '',
@@ -245,7 +246,11 @@ export default function BannerDisplay({
                 transformOrigin: focalPoint || 'center',
                 objectFit: fitMode || 'cover',
               }}
-              className={`w-full h-full pointer-events-none transition-transform duration-75 select-none ${
+              className={`w-full h-full pointer-events-none select-none ${
+                isInteractive
+                  ? 'transition-transform duration-75'
+                  : 'transition-all duration-1000 ease-out animate-ken-burns'
+              } ${
                 fitMode === 'contain'
                   ? 'object-contain'
                   : fitMode === 'fill'
@@ -265,7 +270,7 @@ export default function BannerDisplay({
       {/* 3. Lớp phủ Overlay với Opacity tùy chỉnh chính xác */}
       {overlay && (
         <div
-          className="absolute inset-0 pointer-events-none z-10 transition-all duration-200"
+          className="absolute inset-0 pointer-events-none z-10 transition-all duration-500"
           style={{
             backgroundColor: `rgba(0, 0, 0, ${(overlayOpacity ?? 30) / 100})`,
           }}
@@ -280,7 +285,13 @@ export default function BannerDisplay({
           <div className="max-w-2xl space-y-2 sm:space-y-3 pointer-events-auto">
             {/* Phụ đề / Badge */}
             {subtitle?.trim() && (
-              <div>
+              <div
+                className={`transition-all duration-700 ease-out transform ${
+                  isActive
+                    ? 'opacity-100 translate-y-0 delay-100'
+                    : 'opacity-0 translate-y-3'
+                }`}
+              >
                 <span
                   className={`inline-block bg-[#C59B27] text-[#1E120D] font-bold rounded-sm shadow-md uppercase tracking-wider ${typography.badge}`}
                 >
@@ -292,7 +303,11 @@ export default function BannerDisplay({
             {/* Tiêu đề */}
             {title?.trim() && (
               <h2
-                className={`font-serif text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] ${typography.title}`}
+                className={`font-serif text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] transition-all duration-700 ease-out transform ${typography.title} ${
+                  isActive
+                    ? 'opacity-100 translate-y-0 delay-200'
+                    : 'opacity-0 translate-y-4'
+                }`}
               >
                 {title}
               </h2>
@@ -301,7 +316,11 @@ export default function BannerDisplay({
             {/* Mô tả */}
             {description?.trim() && (
               <p
-                className={`text-gray-200 drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)] font-light leading-relaxed max-w-xl ${typography.desc}`}
+                className={`text-gray-200 drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)] font-light leading-relaxed max-w-xl transition-all duration-700 ease-out transform ${typography.desc} ${
+                  isActive
+                    ? 'opacity-100 translate-y-0 delay-300'
+                    : 'opacity-0 translate-y-4'
+                }`}
               >
                 {description}
               </p>
@@ -309,7 +328,13 @@ export default function BannerDisplay({
 
             {/* Nút bấm (Chỉ render nút nào có text thực sự) */}
             {(linkText?.trim() || secondaryLinkText?.trim()) && (
-              <div className="pt-2 sm:pt-3 flex items-center gap-2.5 sm:gap-3.5 flex-wrap">
+              <div
+                className={`pt-2 sm:pt-3 flex items-center gap-2.5 sm:gap-3.5 flex-wrap transition-all duration-700 ease-out transform ${
+                  isActive
+                    ? 'opacity-100 translate-y-0 delay-500'
+                    : 'opacity-0 translate-y-4'
+                }`}
+              >
                 {linkText?.trim() && (
                   isLivePreview ? (
                     <span
