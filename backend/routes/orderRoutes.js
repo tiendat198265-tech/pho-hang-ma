@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const orderController = require('../controllers/orderController');
 const { verifyToken, optionalAuth, requireRole, requirePermission } = require('../middlewares/auth');
+const { orderLimiter } = require('../middlewares/rateLimiter');
 
-router.post('/', verifyToken, orderController.createOrder);
+router.post('/', orderLimiter, verifyToken, orderController.createOrder);
 router.get('/my-orders', verifyToken, orderController.getMyOrders);
 router.get('/code/:code', optionalAuth, orderController.getOrderByCode);
 

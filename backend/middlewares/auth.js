@@ -3,6 +3,12 @@ const User = require('../models/User');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'pho_hang_ma_secret_key_2026_dev';
 
+if (process.env.NODE_ENV === 'production' && (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 24)) {
+  console.warn(
+    '⚠️ [SECURITY WARNING] JWT_SECRET is unset or under 24 characters in production! Please configure a cryptographically strong secret in environment variables.'
+  );
+}
+
 const verifyToken = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
@@ -11,6 +17,10 @@ const verifyToken = async (req, res, next) => {
     }
 
     const token = authHeader.split(' ')[1];
+    if (!token) {
+      return res.status(401).json({ success: false, message: 'Token xác thực không hợp lệ' });
+    }
+
     const decoded = jwt.verify(token, JWT_SECRET);
     const user = await User.findById(decoded.id).select('-password');
 
@@ -21,7 +31,18 @@ const verifyToken = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
-    return res.status(401).json({ success: false, message: 'Token không hợp lệ hoặc đã hết hạn' });
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({
+        success: false,
+        code: 'TOKEN_EXPIRED',
+        message: 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.',
+      });
+    }
+    return res.status(401).json({
+      success: false,
+      code: 'INVALID_TOKEN',
+      message: 'Token không hợp lệ hoặc đã hết hạn',
+    });
   }
 };
 

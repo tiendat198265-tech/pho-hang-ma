@@ -2,10 +2,11 @@ const express = require('express');
 const router = express.Router();
 const customOrderController = require('../controllers/customOrderController');
 const { verifyToken, optionalAuth, requireRole } = require('../middlewares/auth');
+const { orderLimiter } = require('../middlewares/rateLimiter');
 const upload = require('../middlewares/upload');
 
 // Khách gửi yêu cầu tùy chỉnh (Bắt buộc phải đăng nhập tài khoản)
-router.post('/', verifyToken, customOrderController.createCustomOrderRequest);
+router.post('/', orderLimiter, verifyToken, customOrderController.createCustomOrderRequest);
 
 // Upload ảnh tham khảo (Bắt buộc đăng nhập)
 router.post('/upload-images', verifyToken, upload.array('images', 10), customOrderController.uploadImages);
