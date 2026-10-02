@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-import { ShoppingCart, ShieldCheck, Truck, ArrowLeft, Check, SlidersHorizontal, ZoomIn, Sparkles } from 'lucide-react';
+import { ShoppingCart, ShieldCheck, Truck, ArrowLeft, Check, SlidersHorizontal, ZoomIn, Phone } from 'lucide-react';
 
 export default function ProductDetailPage() {
   const { slug } = useParams();
@@ -246,16 +246,15 @@ export default function ProductDetailPage() {
                 <button
                   type="button"
                   onClick={handleBuyNow}
-                  className="px-6 py-3 bg-[#8B1E21] hover:bg-[#9E2A2B] text-white font-bold text-[15px] rounded-[3px] flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all flex-1 cursor-pointer"
+                  className="px-6 py-3 bg-[#8B1E21] hover:bg-[#9E2A2B] text-white font-bold text-[15px] rounded-[3px] flex items-center justify-center shadow-md hover:shadow-lg transition-all flex-1 cursor-pointer"
                 >
-                  <Sparkles size={17} className="text-amber-300" />
                   <span>Đặt Hàng Ngay</span>
                 </button>
               </div>
 
               {/* Note about admin verification */}
               <div className="p-3 bg-[#FAF7F2] border border-[#E6DFD5] rounded-[4px] text-[12.5px] text-[#584140] flex items-start gap-2 leading-relaxed">
-                <Sparkles size={15} className="text-[#8B1E21] shrink-0 mt-0.5" />
+                <Phone size={15} className="text-[#8B1E21] shrink-0 mt-0.5" />
                 <span>
                   Sau khi đặt hàng, <strong>Thợ Cả / Ban quản trị xưởng</strong> sẽ tự động liên hệ lại qua số điện thoại để xác thực chi tiết quy cách đồ mã và lịch bàn giao cẩn thận.
                 </span>
