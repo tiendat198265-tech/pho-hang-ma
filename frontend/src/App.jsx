@@ -10,6 +10,7 @@ import Footer from './components/Footer';
 import QuickConsultModal from './components/QuickConsultModal';
 import ZaloFloatingButton from './components/ZaloFloatingButton';
 import ToastContainer from './components/ToastContainer';
+import { useAntiDevTools } from './hooks/useAntiDevTools';
 
 // Home page loaded directly for fast first contentful paint
 import HomePage from './pages/HomePage';
@@ -42,6 +43,9 @@ function RouteLoadingFallback() {
 }
 
 export default function App() {
+  // Bật lớp bảo vệ bề mặt chống soi F12 & chuột phải
+  useAntiDevTools();
+
   return (
     <AuthProvider>
       <SettingsProvider>
