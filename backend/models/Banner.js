@@ -17,10 +17,37 @@ const bannerSchema = new mongoose.Schema(
       trim: true,
       default: '',
     },
+    mediaType: {
+      type: String,
+      enum: ['image', 'video'],
+      default: 'image',
+    },
     imageUrl: {
       type: String,
-      required: [true, 'Hình ảnh banner là bắt buộc'],
       trim: true,
+      default: '',
+    },
+    videoUrl: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    mobileVideoUrl: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    videoAutoplay: {
+      type: Boolean,
+      default: true,
+    },
+    videoMuted: {
+      type: Boolean,
+      default: true,
+    },
+    videoLoop: {
+      type: Boolean,
+      default: true,
     },
     linkUrl: {
       type: String,

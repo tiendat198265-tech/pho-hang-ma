@@ -38,6 +38,10 @@ import {
   ArrowRight,
   ShieldCheck,
   Check,
+  Video,
+  Play,
+  Volume2,
+  VolumeX,
 } from 'lucide-react';
 import ConfirmModal from './ConfirmModal';
 import BannerDisplay from '../../../components/BannerDisplay';
@@ -62,6 +66,12 @@ export default function BannersTab({ token }) {
     secondaryLinkUrl: '',
     imageUrl: '',
     mobileImageUrl: '',
+    mediaType: 'image', // 'image' | 'video'
+    videoUrl: '',
+    mobileVideoUrl: '',
+    videoAutoplay: true,
+    videoMuted: true,
+    videoLoop: true,
     position: 'HOME_HERO',
     badge: '',
     isActive: true,
@@ -95,8 +105,12 @@ export default function BannersTab({ token }) {
   // Upload Refs & States
   const desktopInputRef = useRef(null);
   const mobileInputRef = useRef(null);
+  const desktopVideoInputRef = useRef(null);
+  const mobileVideoInputRef = useRef(null);
   const [uploadingDesktop, setUploadingDesktop] = useState(false);
   const [uploadingMobile, setUploadingMobile] = useState(false);
+  const [uploadingDesktopVideo, setUploadingDesktopVideo] = useState(false);
+  const [uploadingMobileVideo, setUploadingMobileVideo] = useState(false);
 
   // Image Aspect Ratio Warning
   const [naturalImageDimensions, setNaturalImageDimensions] = useState({ width: 0, height: 0, ratio: 0 });
@@ -330,6 +344,12 @@ export default function BannersTab({ token }) {
       secondaryLinkUrl: b.secondaryLinkUrl || '',
       imageUrl: b.imageUrl || '',
       mobileImageUrl: b.mobileImageUrl || '',
+      mediaType: b.mediaType || (b.videoUrl ? 'video' : 'image'),
+      videoUrl: b.videoUrl || '',
+      mobileVideoUrl: b.mobileVideoUrl || '',
+      videoAutoplay: b.videoAutoplay !== false,
+      videoMuted: b.videoMuted !== false,
+      videoLoop: b.videoLoop !== false,
       position: b.position || 'HOME_HERO',
       badge: b.badge || '',
       isActive: b.isActive !== false,
@@ -427,6 +447,62 @@ export default function BannersTab({ token }) {
     }
   };
 
+  // Upload video cho banner (MP4, WEBM, MOV tối đa 60MB)
+  const handleVideoUpload = async (e, type = 'desktop') => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 60 * 1024 * 1024) {
+      alert('Video có dung lượng vượt quá 60MB. Vui lòng chọn video nhẹ hơn.');
+      return;
+    }
+
+    const localBlobUrl = URL.createObjectURL(file);
+    if (type === 'desktop') {
+      setFormData((prev) => ({ ...prev, mediaType: 'video', videoUrl: localBlobUrl }));
+      setUploadingDesktopVideo(true);
+    } else {
+      setFormData((prev) => ({ ...prev, mobileVideoUrl: localBlobUrl }));
+      setUploadingMobileVideo(true);
+    }
+
+    try {
+      const uploadData = new FormData();
+      uploadData.append('image', file);
+
+      const res = await fetch('/api/banners/upload', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: uploadData,
+      });
+      const data = await res.json();
+      const uploadedUrl = data.videoUrl || data.url || data.imageUrl || data.data?.videoUrl || data.data?.url;
+
+      if (data.success && uploadedUrl) {
+        if (type === 'desktop') {
+          setFormData((prev) => ({ ...prev, mediaType: 'video', videoUrl: uploadedUrl }));
+          showToast('Đã tải video Desktop lên máy chủ thành công!');
+        } else {
+          setFormData((prev) => ({ ...prev, mobileVideoUrl: uploadedUrl }));
+          showToast('Đã tải video Mobile lên máy chủ thành công!');
+        }
+      } else {
+        alert(data.message || 'Lỗi tải video lên máy chủ, vui lòng thử lại.');
+      }
+    } catch (err) {
+      console.error('Lỗi upload video:', err);
+      alert('Không thể kết nối đến máy chủ khi tải video.');
+    } finally {
+      if (type === 'desktop') {
+        setUploadingDesktopVideo(false);
+        if (desktopVideoInputRef.current) desktopVideoInputRef.current.value = '';
+      } else {
+        setUploadingMobileVideo(false);
+        if (mobileVideoInputRef.current) mobileVideoInputRef.current.value = '';
+      }
+    }
+  };
+
   // Submit banner to API
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -437,9 +513,17 @@ export default function BannersTab({ token }) {
       return;
     }
 
-    if (!formData.imageUrl.trim()) {
-      setFormError('Vui lòng tải lên ảnh Desktop cho banner');
-      return;
+    // Kiểm tra media bắt buộc
+    if (formData.mediaType === 'video') {
+      if (!formData.videoUrl.trim() && !formData.imageUrl.trim()) {
+        setFormError('Vui lòng tải lên video hoặc dán đường dẫn video cho banner');
+        return;
+      }
+    } else {
+      if (!formData.imageUrl.trim()) {
+        setFormError('Vui lòng tải lên ảnh Desktop cho banner');
+        return;
+      }
     }
 
     try {
@@ -858,22 +942,50 @@ export default function BannersTab({ token }) {
                     )}
                   </div>
 
-                  {/* 2. HÌNH ẢNH BANNER (DESKTOP & MOBILE) (Requirement 6, 14, 15, 17) */}
+                  {/* 2. HÌNH ẢNH / VIDEO BANNER (DESKTOP & MOBILE) */}
                   <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs space-y-4">
                     <div className="flex items-center justify-between border-b pb-2.5">
                       <h4 className="text-xs font-bold text-gray-900 uppercase tracking-wider flex items-center gap-2">
                         <span className="w-5 h-5 rounded-full bg-red-100 text-[#8B1E21] flex items-center justify-center text-[11px]">2</span>
-                        <span>Hình Ảnh Banner (Desktop & Mobile)</span>
+                        <span>Hình Ảnh / Video Banner (Desktop & Mobile)</span>
                       </h4>
-                      {naturalImageDimensions.width > 0 && (
+                      {naturalImageDimensions.width > 0 && formData.mediaType !== 'video' && (
                         <span className="text-[11px] font-mono text-gray-500">
                           {naturalImageDimensions.width} × {naturalImageDimensions.height}px
                         </span>
                       )}
                     </div>
 
-                    {/* CẢNH BÁO TỶ LỆ KHÔNG PHÙ HỢP (Requirement 14) */}
-                    {ratioMismatchWarning && (
+                    {/* Media Type Switcher: Ảnh vs Video */}
+                    <div className="flex items-center gap-2 p-1 bg-gray-100 rounded-xl">
+                      <button
+                        type="button"
+                        onClick={() => setFormData((p) => ({ ...p, mediaType: 'image' }))}
+                        className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-2 transition-all ${
+                          formData.mediaType !== 'video'
+                            ? 'bg-white text-gray-900 shadow-xs'
+                            : 'text-gray-500 hover:text-gray-900'
+                        }`}
+                      >
+                        <ImageIcon size={15} />
+                        <span>Hình Ảnh (Mặc định)</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setFormData((p) => ({ ...p, mediaType: 'video' }))}
+                        className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-2 transition-all ${
+                          formData.mediaType === 'video'
+                            ? 'bg-[#8B1E21] text-white shadow-xs'
+                            : 'text-gray-500 hover:text-gray-900'
+                        }`}
+                      >
+                        <Video size={15} />
+                        <span>🎬 Video Nền (MP4 / WebM / YouTube)</span>
+                      </button>
+                    </div>
+
+                    {/* CẢNH BÁO TỶ LỆ KHÔNG PHÙ HỢP NẾU DÙNG ẢNH */}
+                    {formData.mediaType !== 'video' && ratioMismatchWarning && (
                       <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800 flex items-start gap-2">
                         <AlertTriangle className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
                         <div>
@@ -889,127 +1001,321 @@ export default function BannersTab({ token }) {
                       </div>
                     )}
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      {/* Thẻ Upload Ảnh Desktop */}
-                      <div className="space-y-1.5">
-                        <div className="flex items-center justify-between">
-                          <label className="text-xs font-semibold text-gray-700">
-                            Ảnh Desktop *
-                          </label>
-                          <span className="text-[10px] text-gray-400">Khuyên dùng 1920×800px</span>
+                    {/* GIAO DIỆN KHI CHỌN HÌNH ẢNH */}
+                    {formData.mediaType !== 'video' ? (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {/* Thẻ Upload Ảnh Desktop */}
+                        <div className="space-y-1.5">
+                          <div className="flex items-center justify-between">
+                            <label className="text-xs font-semibold text-gray-700">
+                              Ảnh Desktop *
+                            </label>
+                            <span className="text-[10px] text-gray-400">Khuyên dùng 1920×800px</span>
+                          </div>
+
+                          <input
+                            type="file"
+                            ref={desktopInputRef}
+                            onChange={(e) => handleUpload(e, 'desktop')}
+                            accept="image/*"
+                            className="hidden"
+                          />
+
+                          <div
+                            onClick={() => desktopInputRef.current?.click()}
+                            className={`relative border-2 border-dashed rounded-xl p-3 text-center cursor-pointer transition-all flex flex-col items-center justify-center min-h-[120px] overflow-hidden ${
+                              formData.imageUrl
+                                ? 'border-emerald-300 bg-emerald-50/20 hover:border-emerald-400'
+                                : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50'
+                            }`}
+                          >
+                            {uploadingDesktop ? (
+                              <div className="flex flex-col items-center gap-1">
+                                <Loader2 className="w-6 h-6 text-[#8B1E21] animate-spin" />
+                                <span className="text-[11px] text-gray-500">Đang nạp ảnh...</span>
+                              </div>
+                            ) : formData.imageUrl ? (
+                              <div className="space-y-1.5 w-full">
+                                <div className="h-16 w-full rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center border border-gray-200">
+                                  <img
+                                    src={formData.imageUrl}
+                                    alt="Desktop Preview"
+                                    className="h-full w-full object-cover"
+                                  />
+                                </div>
+                                <div className="text-[11px] font-semibold text-emerald-700 flex items-center justify-center gap-1">
+                                  <Check className="w-3.5 h-3.5" />
+                                  <span>Nhấp để thay ảnh Desktop</span>
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="space-y-1 text-gray-500">
+                                <UploadCloud className="w-6 h-6 mx-auto text-gray-400" />
+                                <div className="text-xs font-semibold">Tải lên ảnh Desktop</div>
+                                <div className="text-[10px] text-gray-400">JPG, PNG, WEBP (Tối đa 10MB)</div>
+                              </div>
+                            )}
+                          </div>
                         </div>
 
-                        <input
-                          type="file"
-                          ref={desktopInputRef}
-                          onChange={(e) => handleUpload(e, 'desktop')}
-                          accept="image/*"
-                          className="hidden"
-                        />
+                        {/* Thẻ Upload Ảnh Mobile */}
+                        <div className="space-y-1.5">
+                          <div className="flex items-center justify-between">
+                            <label className="text-xs font-semibold text-gray-700">
+                              Ảnh Mobile (Tùy chọn)
+                            </label>
+                            <span className="text-[10px] text-gray-400">Khuyên dùng 800×1000px</span>
+                          </div>
 
-                        <div
-                          onClick={() => desktopInputRef.current?.click()}
-                          className={`relative border-2 border-dashed rounded-xl p-3 text-center cursor-pointer transition-all flex flex-col items-center justify-center min-h-[120px] overflow-hidden ${
-                            formData.imageUrl
-                              ? 'border-emerald-300 bg-emerald-50/20 hover:border-emerald-400'
-                              : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50'
-                          }`}
-                        >
-                          {uploadingDesktop ? (
-                            <div className="flex flex-col items-center gap-1">
-                              <Loader2 className="w-6 h-6 text-[#8B1E21] animate-spin" />
-                              <span className="text-[11px] text-gray-500">Đang nạp ảnh...</span>
-                            </div>
-                          ) : formData.imageUrl ? (
-                            <div className="space-y-1.5 w-full">
-                              <div className="h-16 w-full rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center border border-gray-200">
-                                <img
-                                  src={formData.imageUrl}
-                                  alt="Desktop Preview"
-                                  className="h-full w-full object-cover"
-                                />
+                          <input
+                            type="file"
+                            ref={mobileInputRef}
+                            onChange={(e) => handleUpload(e, 'mobile')}
+                            accept="image/*"
+                            className="hidden"
+                          />
+
+                          <div
+                            onClick={() => mobileInputRef.current?.click()}
+                            className={`relative border-2 border-dashed rounded-xl p-3 text-center cursor-pointer transition-all flex flex-col items-center justify-center min-h-[120px] overflow-hidden ${
+                              formData.mobileImageUrl
+                                ? 'border-blue-300 bg-blue-50/20 hover:border-blue-400'
+                                : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50'
+                            }`}
+                          >
+                            {uploadingMobile ? (
+                              <div className="flex flex-col items-center gap-1">
+                                <Loader2 className="w-6 h-6 text-blue-600 animate-spin" />
+                                <span className="text-[11px] text-gray-500">Đang nạp ảnh...</span>
                               </div>
-                              <div className="text-[11px] font-semibold text-emerald-700 flex items-center justify-center gap-1">
-                                <Check className="w-3.5 h-3.5" />
-                                <span>Nhấp để thay ảnh Desktop</span>
+                            ) : formData.mobileImageUrl ? (
+                              <div className="space-y-1.5 w-full">
+                                <div className="h-16 w-full rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center border border-gray-200">
+                                  <img
+                                    src={formData.mobileImageUrl}
+                                    alt="Mobile Preview"
+                                    className="h-full w-full object-cover"
+                                  />
+                                </div>
+                                <div className="flex items-center justify-center gap-2">
+                                  <span className="text-[11px] font-semibold text-blue-700">
+                                    Đổi ảnh Mobile
+                                  </span>
+                                  <button
+                                    type="button"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setFormData((prev) => ({ ...prev, mobileImageUrl: '' }));
+                                      showToast('Đã xóa ảnh Mobile riêng, tự động dùng ảnh Desktop cho Mobile!');
+                                    }}
+                                    className="text-[10.5px] text-rose-600 hover:underline"
+                                  >
+                                    (Xóa)
+                                  </button>
+                                </div>
                               </div>
-                            </div>
-                          ) : (
-                            <div className="space-y-1 text-gray-500">
-                              <UploadCloud className="w-6 h-6 mx-auto text-gray-400" />
-                              <div className="text-xs font-semibold">Tải lên ảnh Desktop</div>
-                              <div className="text-[10px] text-gray-400">JPG, PNG, WEBP (Tối đa 10MB)</div>
-                            </div>
-                          )}
+                            ) : (
+                              <div className="space-y-1 text-gray-500">
+                                <Smartphone className="w-6 h-6 mx-auto text-gray-400" />
+                                <div className="text-xs font-semibold">Tải lên ảnh Mobile riêng</div>
+                                <div className="text-[10px] text-gray-400">Nếu không có sẽ dùng ảnh Desktop</div>
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
+                    ) : (
+                      /* GIAO DIỆN KHI CHỌN VIDEO NỀN */
+                      <div className="space-y-4 pt-1">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          {/* Upload Video Desktop */}
+                          <div className="space-y-1.5">
+                            <div className="flex items-center justify-between">
+                              <label className="text-xs font-semibold text-gray-700">Video Desktop *</label>
+                              <span className="text-[10px] text-gray-400">MP4, WEBM, MOV (Tối đa 60MB)</span>
+                            </div>
 
-                      {/* Thẻ Upload Ảnh Mobile */}
-                      <div className="space-y-1.5">
-                        <div className="flex items-center justify-between">
-                          <label className="text-xs font-semibold text-gray-700">
-                            Ảnh Mobile (Tùy chọn)
-                          </label>
-                          <span className="text-[10px] text-gray-400">Khuyên dùng 800×1000px</span>
+                            <input
+                              type="file"
+                              ref={desktopVideoInputRef}
+                              onChange={(e) => handleVideoUpload(e, 'desktop')}
+                              accept="video/mp4,video/webm,video/quicktime,video/*"
+                              className="hidden"
+                            />
+
+                            <div
+                              onClick={() => desktopVideoInputRef.current?.click()}
+                              className={`relative border-2 border-dashed rounded-xl p-3 text-center cursor-pointer transition-all flex flex-col items-center justify-center min-h-[120px] overflow-hidden ${
+                                formData.videoUrl
+                                  ? 'border-emerald-300 bg-emerald-50/20 hover:border-emerald-400'
+                                  : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50'
+                              }`}
+                            >
+                              {uploadingDesktopVideo ? (
+                                <div className="flex flex-col items-center gap-1">
+                                  <Loader2 className="w-6 h-6 text-[#8B1E21] animate-spin" />
+                                  <span className="text-[11px] text-gray-500">Đang nạp video...</span>
+                                </div>
+                              ) : formData.videoUrl ? (
+                                <div className="space-y-1.5 w-full">
+                                  <div className="h-16 w-full rounded-lg overflow-hidden bg-black flex items-center justify-center border border-gray-200 relative">
+                                    <video src={formData.videoUrl} className="h-full w-full object-cover" muted />
+                                    <Play className="w-6 h-6 text-white absolute inset-auto drop-shadow-md" />
+                                  </div>
+                                  <div className="text-[11px] font-semibold text-emerald-700 flex items-center justify-center gap-1">
+                                    <Check className="w-3.5 h-3.5" />
+                                    <span>Đã có video · Bấm để đổi file</span>
+                                  </div>
+                                </div>
+                              ) : (
+                                <div className="space-y-1 text-gray-500">
+                                  <UploadCloud className="w-6 h-6 mx-auto text-gray-400" />
+                                  <div className="text-xs font-semibold">Tải lên video Desktop</div>
+                                  <div className="text-[10px] text-gray-400">Hỗ trợ MP4, WebM, MOV</div>
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Hoặc dán URL video / YouTube */}
+                            <div className="pt-1">
+                              <input
+                                type="text"
+                                value={formData.videoUrl}
+                                onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
+                                placeholder="Hoặc dán URL file MP4 / link YouTube..."
+                                className="w-full px-2.5 py-1.5 text-xs border border-gray-300 rounded-lg focus:outline-none focus:border-[#8B1E21] bg-white font-mono"
+                              />
+                            </div>
+                          </div>
+
+                          {/* Video Mobile */}
+                          <div className="space-y-1.5">
+                            <div className="flex items-center justify-between">
+                              <label className="text-xs font-semibold text-gray-700">Video Mobile (Tùy chọn)</label>
+                              <span className="text-[10px] text-gray-400">Khuyên dùng tỷ lệ 9:16</span>
+                            </div>
+
+                            <input
+                              type="file"
+                              ref={mobileVideoInputRef}
+                              onChange={(e) => handleVideoUpload(e, 'mobile')}
+                              accept="video/mp4,video/webm,video/quicktime,video/*"
+                              className="hidden"
+                            />
+
+                            <div
+                              onClick={() => mobileVideoInputRef.current?.click()}
+                              className={`relative border-2 border-dashed rounded-xl p-3 text-center cursor-pointer transition-all flex flex-col items-center justify-center min-h-[120px] overflow-hidden ${
+                                formData.mobileVideoUrl
+                                  ? 'border-blue-300 bg-blue-50/20 hover:border-blue-400'
+                                  : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50'
+                              }`}
+                            >
+                              {uploadingMobileVideo ? (
+                                <div className="flex flex-col items-center gap-1">
+                                  <Loader2 className="w-6 h-6 text-blue-600 animate-spin" />
+                                  <span className="text-[11px] text-gray-500">Đang nạp video...</span>
+                                </div>
+                              ) : formData.mobileVideoUrl ? (
+                                <div className="space-y-1.5 w-full">
+                                  <div className="h-16 w-full rounded-lg overflow-hidden bg-black flex items-center justify-center border border-gray-200 relative">
+                                    <video src={formData.mobileVideoUrl} className="h-full w-full object-cover" muted />
+                                    <Play className="w-6 h-6 text-white absolute inset-auto drop-shadow-md" />
+                                  </div>
+                                  <div className="flex items-center justify-center gap-2">
+                                    <span className="text-[11px] font-semibold text-blue-700">Đổi video Mobile</span>
+                                    <button
+                                      type="button"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        setFormData((prev) => ({ ...prev, mobileVideoUrl: '' }));
+                                      }}
+                                      className="text-[10.5px] text-rose-600 hover:underline"
+                                    >
+                                      (Xóa)
+                                    </button>
+                                  </div>
+                                </div>
+                              ) : (
+                                <div className="space-y-1 text-gray-500">
+                                  <Smartphone className="w-6 h-6 mx-auto text-gray-400" />
+                                  <div className="text-xs font-semibold">Tải lên video Mobile riêng</div>
+                                  <div className="text-[10px] text-gray-400">Nếu không có sẽ dùng video Desktop</div>
+                                </div>
+                              )}
+                            </div>
+
+                            <div className="pt-1">
+                              <input
+                                type="text"
+                                value={formData.mobileVideoUrl}
+                                onChange={(e) => setFormData({ ...formData, mobileVideoUrl: e.target.value })}
+                                placeholder="Hoặc dán URL video Mobile..."
+                                className="w-full px-2.5 py-1.5 text-xs border border-gray-300 rounded-lg focus:outline-none focus:border-[#8B1E21] bg-white font-mono"
+                              />
+                            </div>
+                          </div>
                         </div>
 
-                        <input
-                          type="file"
-                          ref={mobileInputRef}
-                          onChange={(e) => handleUpload(e, 'mobile')}
-                          accept="image/*"
-                          className="hidden"
-                        />
+                        {/* Ảnh Bìa Đại Diện (Poster Thumbnail) */}
+                        <div className="p-3 bg-gray-50 rounded-xl border border-gray-200 space-y-2">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs font-bold text-gray-800">Ảnh Bìa Đại Diện (Poster)</span>
+                            <span className="text-[10.5px] text-gray-500">Hiển thị trước khi video chạy hoặc nếu mạng chậm</span>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <input
+                              type="text"
+                              value={formData.imageUrl}
+                              onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
+                              placeholder="Dán link ảnh bìa đại diện (Poster URL)..."
+                              className="flex-1 px-2.5 py-1.5 text-xs border border-gray-300 rounded-lg focus:outline-none focus:border-[#8B1E21] bg-white"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => desktopInputRef.current?.click()}
+                              className="px-3 py-1.5 text-xs font-medium bg-white border border-gray-300 rounded-lg hover:bg-gray-100 flex items-center gap-1.5 shrink-0"
+                            >
+                              <UploadCloud size={14} />
+                              <span>Chọn ảnh bìa</span>
+                            </button>
+                          </div>
+                        </div>
 
-                        <div
-                          onClick={() => mobileInputRef.current?.click()}
-                          className={`relative border-2 border-dashed rounded-xl p-3 text-center cursor-pointer transition-all flex flex-col items-center justify-center min-h-[120px] overflow-hidden ${
-                            formData.mobileImageUrl
-                              ? 'border-blue-300 bg-blue-50/20 hover:border-blue-400'
-                              : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50'
-                          }`}
-                        >
-                          {uploadingMobile ? (
-                            <div className="flex flex-col items-center gap-1">
-                              <Loader2 className="w-6 h-6 text-blue-600 animate-spin" />
-                              <span className="text-[11px] text-gray-500">Đang nạp ảnh...</span>
-                            </div>
-                          ) : formData.mobileImageUrl ? (
-                            <div className="space-y-1.5 w-full">
-                              <div className="h-16 w-full rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center border border-gray-200">
-                                <img
-                                  src={formData.mobileImageUrl}
-                                  alt="Mobile Preview"
-                                  className="h-full w-full object-cover"
-                                />
-                              </div>
-                              <div className="flex items-center justify-center gap-2">
-                                <span className="text-[11px] font-semibold text-blue-700">
-                                  Đổi ảnh Mobile
-                                </span>
-                                <button
-                                  type="button"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    setFormData((prev) => ({ ...prev, mobileImageUrl: '' }));
-                                    showToast('Đã xóa ảnh Mobile riêng, tự động dùng ảnh Desktop cho Mobile!');
-                                  }}
-                                  className="text-[10.5px] text-rose-600 hover:underline"
-                                >
-                                  (Xóa)
-                                </button>
-                              </div>
-                            </div>
-                          ) : (
-                            <div className="space-y-1 text-gray-500">
-                              <Smartphone className="w-6 h-6 mx-auto text-gray-400" />
-                              <div className="text-xs font-semibold">Tải lên ảnh Mobile riêng</div>
-                              <div className="text-[10px] text-gray-400">Nếu không có sẽ dùng ảnh Desktop</div>
-                            </div>
-                          )}
+                        {/* Video Settings Toggles */}
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
+                          <label className="flex items-center gap-2 p-2.5 bg-gray-50 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors">
+                            <input
+                              type="checkbox"
+                              checked={formData.videoAutoplay}
+                              onChange={(e) => setFormData({ ...formData, videoAutoplay: e.target.checked })}
+                              className="w-4 h-4 text-[#8B1E21] rounded"
+                            />
+                            <span className="text-xs font-medium text-gray-700">Tự động phát</span>
+                          </label>
+
+                          <label className="flex items-center gap-2 p-2.5 bg-gray-50 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors">
+                            <input
+                              type="checkbox"
+                              checked={formData.videoMuted}
+                              onChange={(e) => setFormData({ ...formData, videoMuted: e.target.checked })}
+                              className="w-4 h-4 text-[#8B1E21] rounded"
+                            />
+                            <span className="text-xs font-medium text-gray-700">Tắt tiếng mặc định</span>
+                          </label>
+
+                          <label className="flex items-center gap-2 p-2.5 bg-gray-50 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors">
+                            <input
+                              type="checkbox"
+                              checked={formData.videoLoop}
+                              onChange={(e) => setFormData({ ...formData, videoLoop: e.target.checked })}
+                              className="w-4 h-4 text-[#8B1E21] rounded"
+                            />
+                            <span className="text-xs font-medium text-gray-700">Lặp lại vô tận</span>
+                          </label>
                         </div>
                       </div>
-                    </div>
+                    )}
                   </div>
 
                   {/* 3. TỶ LỆ & CHIỀU CAO KHUNG BANNER (Requirement 8, 9) */}

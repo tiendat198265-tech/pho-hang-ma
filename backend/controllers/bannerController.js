@@ -112,6 +112,12 @@ exports.createBanner = async (req, res) => {
       startDate: startDate || null,
       endDate: endDate || null,
       mobileImageUrl: req.body.mobileImageUrl || '',
+      mediaType: req.body.mediaType || 'image',
+      videoUrl: req.body.videoUrl || '',
+      mobileVideoUrl: req.body.mobileVideoUrl || '',
+      videoAutoplay: req.body.videoAutoplay !== undefined ? Boolean(req.body.videoAutoplay) : true,
+      videoMuted: req.body.videoMuted !== undefined ? Boolean(req.body.videoMuted) : true,
+      videoLoop: req.body.videoLoop !== undefined ? Boolean(req.body.videoLoop) : true,
       overlay: req.body.overlay !== undefined ? Boolean(req.body.overlay) : false,
       overlayOpacity: req.body.overlayOpacity !== undefined ? Number(req.body.overlayOpacity) : 30,
       isPureImage: req.body.isPureImage !== undefined ? Boolean(req.body.isPureImage) : false,
@@ -202,11 +208,11 @@ exports.deleteBanner = async (req, res) => {
   }
 };
 
-// Admin: Tải ảnh banner/sản phẩm từ máy tính lên máy chủ
+// Admin: Tải ảnh hoặc video banner từ máy tính lên máy chủ
 exports.uploadBannerImage = async (req, res) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ success: false, message: 'Vui lòng chọn file ảnh để tải lên' });
+      return res.status(400).json({ success: false, message: 'Vui lòng chọn file ảnh hoặc video để tải lên' });
     }
 
     let fileUrl = `/uploads/${req.file.filename}`;
@@ -221,14 +227,26 @@ exports.uploadBannerImage = async (req, res) => {
       }
     }
 
+    const isVideo = Boolean(
+      req.file.mimetype &&
+      (req.file.mimetype.startsWith('video/') ||
+        ['.mp4', '.webm', '.mov', '.ogg'].some((ext) => req.file.filename.toLowerCase().endsWith(ext)))
+    );
+
     res.json({
       success: true,
-      message: 'Tải ảnh lên thành công',
+      message: isVideo ? 'Tải video lên thành công' : 'Tải ảnh lên thành công',
       url: fileUrl,
       imageUrl: fileUrl,
+      videoUrl: fileUrl,
+      isVideo,
+      mediaType: isVideo ? 'video' : 'image',
       data: {
         url: fileUrl,
         imageUrl: fileUrl,
+        videoUrl: fileUrl,
+        isVideo,
+        mediaType: isVideo ? 'video' : 'image',
         filename: req.file.filename,
       },
       filename: req.file.filename,

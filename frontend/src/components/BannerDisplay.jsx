@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Sparkles, Move } from 'lucide-react';
+import { ArrowRight, Sparkles, Move, Volume2, VolumeX } from 'lucide-react';
 
 /**
  * BannerDisplay: Shared banner rendering component used by both
@@ -30,6 +30,12 @@ export default function BannerDisplay({
     secondaryLinkUrl = '',
     imageUrl = '',
     mobileImageUrl = '',
+    mediaType = 'image',
+    videoUrl = '',
+    mobileVideoUrl = '',
+    videoAutoplay = true,
+    videoMuted = true,
+    videoLoop = true,
     overlay = false,
     overlayOpacity = 30,
     aspectRatio = 2.63,
@@ -48,6 +54,29 @@ export default function BannerDisplay({
   const containerRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
   const dragStartRef = useRef({ startX: 0, startY: 0, posX: 0, posY: 0 });
+  const [isMuted, setIsMuted] = useState(videoMuted !== false);
+
+  useEffect(() => {
+    setIsMuted(videoMuted !== false);
+  }, [videoMuted]);
+
+  // Determine active video & image
+  const activeVideo =
+    device === 'MOBILE' && mobileVideoUrl
+      ? mobileVideoUrl
+      : videoUrl || (/\.(mp4|webm|mov|ogg)($|\?)/i.test(imageUrl) ? imageUrl : '');
+
+  const isVideo = mediaType === 'video' || Boolean(activeVideo);
+
+  // Helper for YouTube embeds
+  const getYouTubeId = (url) => {
+    if (!url) return null;
+    const match = url.match(
+      /(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/
+    );
+    return match ? match[1] : null;
+  };
+  const youTubeId = isVideo && activeVideo ? getYouTubeId(activeVideo) : null;
 
   // Choose appropriate image: mobileImageUrl on mobile device, else imageUrl
   const activeImage =
@@ -229,7 +258,43 @@ export default function BannerDisplay({
             : undefined
         }
       >
-        {activeImage ? (
+        {isVideo && youTubeId ? (
+          <div className="w-full h-full relative overflow-hidden pointer-events-none flex items-center justify-center">
+            <iframe
+              className="w-[120%] h-[120%] absolute pointer-events-none"
+              src={`https://www.youtube.com/embed/${youTubeId}?autoplay=1&mute=1&loop=1&playlist=${youTubeId}&controls=0&showinfo=0&rel=0&modestbranding=1`}
+              title={title || 'Banner Video'}
+              allow="autoplay; encrypted-media"
+              allowFullScreen
+            />
+          </div>
+        ) : isVideo && activeVideo ? (
+          <video
+            key={activeVideo}
+            src={activeVideo}
+            poster={activeImage || undefined}
+            autoPlay={videoAutoplay !== false}
+            muted={isMuted}
+            loop={videoLoop !== false}
+            playsInline
+            style={{
+              transform: `translate(${positionX}px, ${positionY}px) scale(${zoomX / 100}, ${
+                zoomY / 100
+              })`,
+              transformOrigin: focalPoint || 'center',
+              objectFit: fitMode || 'cover',
+            }}
+            className={`w-full h-full pointer-events-none select-none ${
+              isInteractive ? 'transition-transform duration-75' : ''
+            } ${
+              fitMode === 'contain'
+                ? 'object-contain'
+                : fitMode === 'fill'
+                ? 'object-fill'
+                : 'object-cover'
+            }`}
+          />
+        ) : activeImage ? (
           <picture className="w-full h-full block">
             {/* Tự động switch ảnh mobile trên màn hình thực tế của khách hàng nếu không ở chế độ giả lập device */}
             {!isLivePreview && mobileImageUrl && (
@@ -261,11 +326,28 @@ export default function BannerDisplay({
           </picture>
         ) : isInteractive || isLivePreview ? (
           <div className="flex flex-col items-center justify-center text-white/40 gap-2 p-4 text-center">
-            <span className="text-sm font-light">Chưa có hình ảnh banner</span>
-            <span className="text-xs text-white/30">Vui lòng tải ảnh lên hoặc dán link ảnh</span>
+            <span className="text-sm font-light">Chưa có hình ảnh hoặc video banner</span>
+            <span className="text-xs text-white/30">Vui lòng tải ảnh/video lên hoặc dán link</span>
           </div>
         ) : null}
       </div>
+
+      {/* Floating Audio Mute/Unmute toggle for video */}
+      {isVideo && activeVideo && !youTubeId && !isLivePreview && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsMuted((prev) => !prev);
+          }}
+          className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 z-30 p-2 sm:px-3 sm:py-1.5 rounded-full bg-black/60 hover:bg-[#8B1E21] text-white backdrop-blur-md border border-white/20 transition-all duration-200 hover:scale-105 active:scale-95 shadow-xl flex items-center gap-1.5 text-xs"
+          title={isMuted ? 'Bật âm thanh video' : 'Tắt tiếng video'}
+          aria-label={isMuted ? 'Bật âm thanh video' : 'Tắt tiếng video'}
+        >
+          {isMuted ? <VolumeX size={15} /> : <Volume2 size={15} />}
+          <span className="text-[11px] hidden sm:inline font-medium">{isMuted ? 'Bật tiếng' : 'Tắt tiếng'}</span>
+        </button>
+      )}
 
       {/* 3. Lớp phủ Overlay với Opacity tùy chỉnh chính xác */}
       {overlay && (
