@@ -213,22 +213,22 @@ export default function ProductDetailPage() {
 
             {/* Cart & Buy Buttons */}
             <div className="pt-4 space-y-3">
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                <div className="flex items-center border border-[#D5CCC1] rounded-[3px] bg-[#FAF7F2] overflow-hidden self-start sm:self-auto shrink-0">
+              <div className="flex flex-col sm:flex-row items-stretch gap-3">
+                <div className="h-12 flex items-stretch border border-[#D5CCC1] rounded-[3px] bg-[#FAF7F2] overflow-hidden shrink-0 self-stretch sm:self-auto">
                   <button
                     type="button"
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="w-10 h-11 flex items-center justify-center text-[#262626] hover:bg-white text-base font-bold transition-colors cursor-pointer"
+                    className="w-10 h-full flex items-center justify-center text-[#262626] hover:bg-white text-base font-bold transition-colors cursor-pointer"
                   >
                     -
                   </button>
-                  <span className="w-12 text-center font-bold text-[15px] text-[#8B1E21]">
+                  <span className="w-11 h-full flex items-center justify-center font-bold text-[15px] text-[#8B1E21] select-none">
                     {quantity}
                   </span>
                   <button
                     type="button"
                     onClick={() => setQuantity(quantity + 1)}
-                    className="w-10 h-11 flex items-center justify-center text-[#262626] hover:bg-white text-base font-bold transition-colors cursor-pointer"
+                    className="w-10 h-full flex items-center justify-center text-[#262626] hover:bg-white text-base font-bold transition-colors cursor-pointer"
                   >
                     +
                   </button>
@@ -237,16 +237,16 @@ export default function ProductDetailPage() {
                 <button
                   type="button"
                   onClick={handleAddToCart}
-                  className="px-4 py-3 border-2 border-[#8B1E21] text-[#8B1E21] hover:bg-[#F9F4E8] font-bold text-[14px] rounded-[3px] flex items-center justify-center gap-2 transition-all flex-1 cursor-pointer"
+                  className="h-12 px-4 border-2 border-[#8B1E21] text-[#8B1E21] hover:bg-[#F9F4E8] font-bold text-[14px] rounded-[3px] flex items-center justify-center gap-2 transition-all flex-1 whitespace-nowrap cursor-pointer select-none"
                 >
-                  <ShoppingCart size={18} />
+                  <ShoppingCart size={18} className="shrink-0" />
                   <span>Thêm Vào Giỏ Hàng</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={handleBuyNow}
-                  className="px-6 py-3 bg-[#8B1E21] hover:bg-[#9E2A2B] text-white font-bold text-[15px] rounded-[3px] flex items-center justify-center shadow-md hover:shadow-lg transition-all flex-1 cursor-pointer"
+                  className="h-12 px-5 bg-[#8B1E21] hover:bg-[#9E2A2B] text-white font-bold text-[14.5px] rounded-[3px] flex items-center justify-center shadow-md hover:shadow-lg transition-all flex-1 whitespace-nowrap cursor-pointer select-none"
                 >
                   <span>Đặt Hàng Ngay</span>
                 </button>
