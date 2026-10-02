@@ -79,7 +79,39 @@ async function migrate() {
       console.log(`✓ Restored ${colName}: ${parsedDocs.length} documents into target DB.`);
     }
 
-    console.log('\n🎉 ALL DATA MIGRATED TO TARGET MONGODB ATLAS SUCCESSFULLY!');
+    console.log('\n📊 ĐANG ĐỐI CHIẾU DỮ LIỆU GIỮA LOCAL VÀ ATLAS...');
+    
+    // Connect to local DB to compare
+    const localConn = await mongoose.createConnection('mongodb://127.0.0.1:27017/pho_hang_ma').asPromise();
+    
+    console.log('\n+---------------------+-------------+-------------+------------+');
+    console.log('| Collection          | Local Count | Atlas Count | Trạng Thái |');
+    console.log('+---------------------+-------------+-------------+------------+');
+
+    let allMatched = true;
+    for (const file of files) {
+      const colName = path.basename(file, '.json');
+      const localCount = await localConn.db.collection(colName).countDocuments();
+      const atlasCount = await mongoose.connection.db.collection(colName).countDocuments();
+      const isMatch = localCount === atlasCount;
+      if (!isMatch) allMatched = false;
+
+      const cPad = colName.padEnd(19);
+      const lPad = String(localCount).padStart(11);
+      const aPad = String(atlasCount).padStart(11);
+      const status = isMatch ? '✅ Khớp 100%' : '❌ Lệch';
+
+      console.log(`| ${cPad} | ${lPad} | ${aPad} | ${status} |`);
+    }
+    console.log('+---------------------+-------------+-------------+------------+');
+
+    await localConn.close();
+
+    if (allMatched) {
+      console.log('\n🎉 TOÀN BỘ 14 COLLECTIONS ĐÃ ĐƯỢC CHUYỂN LÊN ATLAS VÀ ĐỐI CHIẾU KHỚP 100%!');
+    } else {
+      console.warn('\n⚠️ CẢNH BÁO: Có bảng chưa khớp số lượng, vui lòng kiểm tra lại log.');
+    }
   } catch (err) {
     console.error('❌ Migration failed:', err);
   } finally {
