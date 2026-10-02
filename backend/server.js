@@ -13,11 +13,12 @@ const HOST = process.env.HOST || '0.0.0.0';
 // Connect to MongoDB
 connectDB();
 
-// CORS configuration supporting localhost & Cloudflare Pages (*.pages.dev)
+// CORS configuration supporting localhost, Vercel (*.vercel.app) & Cloudflare Pages (*.pages.dev)
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:3000',
   'http://127.0.0.1:5173',
+  'https://frontend-two-rho-39.vercel.app',
   process.env.CLIENT_URL,
   process.env.CORS_ORIGIN,
 ].filter(Boolean);
@@ -29,6 +30,7 @@ app.use(
       const isAllowed =
         allowedOrigins.includes(origin) ||
         origin.endsWith('.pages.dev') ||
+        origin.endsWith('.vercel.app') ||
         process.env.NODE_ENV !== 'production';
 
       if (isAllowed) {
@@ -117,3 +119,5 @@ const handleGracefulShutdown = async (signal) => {
 
 process.on('SIGTERM', () => handleGracefulShutdown('SIGTERM'));
 process.on('SIGINT', () => handleGracefulShutdown('SIGINT'));
+
+module.exports = app;

@@ -1,8 +1,17 @@
 {
   "rewrites": [
     {
+      "source": "/api/(.*)",
+      "destination": "https://backend-ashen-six-17.vercel.app/api/$1"
+    },
+    {
+      "source": "/uploads/(.*)",
+      "destination": "https://backend-ashen-six-17.vercel.app/uploads/$1"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
   ]
 }
+
