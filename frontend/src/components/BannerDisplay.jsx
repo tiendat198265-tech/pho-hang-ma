@@ -208,7 +208,7 @@ export default function BannerDisplay({
         ? 'text-base font-bold leading-snug'
         : device === 'TABLET'
         ? 'text-xl font-bold leading-tight'
-        : 'text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight',
+        : 'text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-tight',
     desc:
       device === 'MOBILE'
         ? 'text-[11px] line-clamp-2'
@@ -225,8 +225,8 @@ export default function BannerDisplay({
       device === 'MOBILE'
         ? 'p-4 sm:p-5'
         : device === 'TABLET'
-        ? 'p-6 sm:p-8'
-        : 'p-6 sm:p-10 lg:p-14',
+        ? 'p-5 sm:p-8'
+        : 'p-4 sm:p-8 lg:p-12',
   };
 
   return (

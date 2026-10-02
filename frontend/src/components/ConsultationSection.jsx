@@ -133,21 +133,21 @@ export default function ConsultationSection() {
   };
 
   return (
-    <section id="dang-ky-tu-van" className="py-16 sm:py-20 bg-gradient-to-b from-[#2B1D16] to-[#1E120D] text-[#FAF7F2] relative overflow-hidden">
+    <section id="dang-ky-tu-van" className="py-12 sm:py-16 lg:py-20 bg-gradient-to-b from-[#2B1D16] to-[#1E120D] text-[#FAF7F2] relative overflow-hidden">
       {/* Background Motifs */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-[#C59B27]/5 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#8B1E21]/10 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-[1320px] mx-auto px-4 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
           {/* Cột trái: Giới thiệu dịch vụ tư vấn */}
-          <div className="lg:col-span-5 space-y-6">
+          <div className="lg:col-span-5 space-y-5 sm:space-y-6">
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-amber-400/10 border border-amber-400/30 rounded-full text-amber-300 text-xs font-semibold tracking-wider uppercase">
               <Sparkles size={14} className="text-amber-400" />
               <span>Dịch Vụ Tư Vấn Đàn Lễ Cổ Truyền</span>
             </div>
 
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold leading-tight text-amber-100">
+            <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight text-amber-100">
               Để Lại Thông Tin <br className="hidden sm:inline" />
               <span className="text-[#E5B54F]">Thợ Cả Gọi Lại Tư Vấn</span>
             </h2>
@@ -192,7 +192,7 @@ export default function ConsultationSection() {
 
           {/* Cột phải: Form nhập thông tin */}
           <div className="lg:col-span-7">
-            <div className="bg-[#FAF7F2] text-[#262626] rounded-xl p-6 sm:p-8 shadow-2xl border-2 border-[#C59B27]/40 relative">
+            <div className="bg-[#FAF7F2] text-[#262626] rounded-xl p-4 sm:p-6 lg:p-8 shadow-2xl border-2 border-[#C59B27]/40 relative">
               {/* Trang trí góc cổ truyền */}
               <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-[#8B1E21]" />
               <div className="absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 border-[#8B1E21]" />

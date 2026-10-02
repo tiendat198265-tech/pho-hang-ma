@@ -136,7 +136,7 @@ export default function HomePage() {
     <div className="w-full bg-[#FAF7F2] min-h-screen">
       {/* 1. HERO SLIDER SECTION (TRÀN VIỀN - TỐI GIẢN - TÔN VINH ẢNH BANNER NGUYÊN BẢN) */}
       {loading ? (
-        <section className="w-full h-[420px] sm:h-[520px] lg:h-[630px] bg-[#1E120D] relative overflow-hidden flex items-end p-6 sm:p-10 lg:p-14 select-none">
+        <section className="w-full h-[380px] sm:h-[480px] md:h-[540px] lg:h-[630px] bg-[#1E120D] relative overflow-hidden flex items-end p-5 sm:p-10 lg:p-14 select-none">
           {/* Subtle moving gold ray shimmer */}
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#C59B27]/15 to-transparent -translate-x-full animate-gold-shimmer pointer-events-none" />
           
@@ -153,7 +153,7 @@ export default function HomePage() {
         </section>
       ) : heroBanners.length > 0 ? (
         <section
-          className="w-full h-[420px] sm:h-[520px] lg:h-[630px] relative overflow-hidden bg-[#1E120D] select-none group"
+          className="w-full h-[380px] sm:h-[480px] md:h-[540px] lg:h-[630px] relative overflow-hidden bg-[#1E120D] select-none group"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
           onTouchStart={handleTouchStart}
@@ -197,20 +197,20 @@ export default function HomePage() {
             <>
               <button
                 onClick={handlePrevSlide}
-                className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-black/40 hover:bg-[#8B1E21] text-white border border-white/20 hover:border-[#C59B27] backdrop-blur-md flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 shadow-2xl opacity-80 hover:opacity-100"
+                className="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-black/40 hover:bg-[#8B1E21] text-white border border-white/20 hover:border-[#C59B27] backdrop-blur-md flex items-center justify-center transition-all duration-300 hover:scale-105 active:scale-95 shadow-2xl opacity-80 hover:opacity-100"
                 title="Banner trước"
                 aria-label="Previous slide"
               >
-                <ChevronLeft size={22} className="transition-transform duration-300 group-hover:-translate-x-0.5" />
+                <ChevronLeft size={20} className="transition-transform duration-300 group-hover:-translate-x-0.5" />
               </button>
 
               <button
                 onClick={handleNextSlide}
-                className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-black/40 hover:bg-[#8B1E21] text-white border border-white/20 hover:border-[#C59B27] backdrop-blur-md flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 shadow-2xl opacity-80 hover:opacity-100"
+                className="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-black/40 hover:bg-[#8B1E21] text-white border border-white/20 hover:border-[#C59B27] backdrop-blur-md flex items-center justify-center transition-all duration-300 hover:scale-105 active:scale-95 shadow-2xl opacity-80 hover:opacity-100"
                 title="Banner tiếp"
                 aria-label="Next slide"
               >
-                <ChevronRight size={22} className="transition-transform duration-300 group-hover:translate-x-0.5" />
+                <ChevronRight size={20} className="transition-transform duration-300 group-hover:translate-x-0.5" />
               </button>
 
               {/* Bottom Slider Indicators with Luxury Progress Pills */}
@@ -249,11 +249,11 @@ export default function HomePage() {
       ) : null}
 
       {/* 2. DANH MỤC SẢN PHẨM TRUYỀN THỐNG */}
-      <section className="py-14 border-b border-[#E6DFD5] bg-[#FAF7F2]">
+      <section className="py-10 sm:py-14 border-b border-[#E6DFD5] bg-[#FAF7F2]">
         <div className="max-w-[1320px] mx-auto px-4">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 border-b border-[#E6DFD5] pb-3">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-6 sm:mb-8 border-b border-[#E6DFD5] pb-3">
             <div>
-              <h2 className="font-serif text-[26px] sm:text-[30px] font-bold text-[#262626]">
+              <h2 className="font-serif text-[22px] sm:text-[26px] md:text-[30px] font-bold text-[#262626]">
                 Danh Mục Sản Phẩm Truyền Thống
               </h2>
             </div>
@@ -266,7 +266,7 @@ export default function HomePage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-5">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 lg:gap-5">
             {categories.map((cat) => (
               <Link
                 key={cat._id}

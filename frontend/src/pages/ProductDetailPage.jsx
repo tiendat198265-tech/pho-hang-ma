@@ -80,10 +80,10 @@ export default function ProductDetailPage() {
   }
 
   return (
-    <div className="w-full bg-[#FAF7F2] min-h-screen py-10">
+    <div className="w-full bg-[#FAF7F2] min-h-screen py-6 sm:py-10">
       <div className="max-w-[1200px] mx-auto px-4">
         {/* Breadcrumb */}
-        <div className="text-[13px] text-[#584140] mb-6 flex items-center gap-2">
+        <div className="text-xs sm:text-[13px] text-[#584140] mb-5 sm:mb-6 flex items-center gap-1.5 sm:gap-2 flex-wrap">
           <Link to="/" className="hover:text-[#8B1E21]">Trang Chủ</Link>
           <span>/</span>
           <Link to="/san-pham" className="hover:text-[#8B1E21]">Linh Phẩm</Link>
@@ -92,7 +92,7 @@ export default function ProductDetailPage() {
         </div>
 
         {/* Main Grid */}
-        <div className="bg-white border border-[#E6DFD5] rounded-[4px] p-6 lg:p-8 shadow-antique-card grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+        <div className="bg-white border border-[#E6DFD5] rounded-[4px] p-4 sm:p-6 lg:p-8 shadow-antique-card grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 items-start">
           {/* Images Gallery */}
           <div className="md:col-span-6 space-y-4">
             <div

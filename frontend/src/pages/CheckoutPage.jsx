@@ -131,12 +131,12 @@ export default function CheckoutPage() {
   };
 
   return (
-    <div className="w-full bg-[#FAF7F2] min-h-screen py-10">
+    <div className="w-full bg-[#FAF7F2] min-h-screen py-6 sm:py-10">
       <div className="max-w-[1200px] mx-auto px-4">
         {/* Header */}
-        <div className="border-b border-[#E6DFD5] pb-4 mb-8">
+        <div className="border-b border-[#E6DFD5] pb-4 mb-6 sm:mb-8">
           <span className="seal-badge mb-1">XÁC NHẬN THANH TOÁN</span>
-          <h1 className="font-serif text-[28px] font-bold text-[#262626]">
+          <h1 className="font-serif text-[24px] sm:text-[28px] font-bold text-[#262626]">
             Đặt Mua Đồ Lễ Trực Tiếp
           </h1>
         </div>
@@ -148,9 +148,9 @@ export default function CheckoutPage() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
           {/* Shipping Form */}
-          <div className="lg:col-span-7 bg-white border border-[#E6DFD5] p-6 rounded-[4px] shadow-antique-card space-y-6">
+          <div className="lg:col-span-7 bg-white border border-[#E6DFD5] p-4 sm:p-6 rounded-[4px] shadow-antique-card space-y-5 sm:space-y-6">
             <h2 className="font-serif text-[20px] font-bold text-[#262626] pb-3 border-b border-[#E6DFD5]">
               Thông Tin Giao Hàng Bằng Xe Mui Kín
             </h2>
@@ -293,7 +293,7 @@ export default function CheckoutPage() {
           </div>
 
           {/* Right Summary */}
-          <div className="lg:col-span-5 bg-white border-2 border-[#C59B27] p-6 rounded-[4px] shadow-antique-card space-y-4">
+          <div className="lg:col-span-5 bg-white border-2 border-[#C59B27] p-4 sm:p-6 rounded-[4px] shadow-antique-card space-y-4">
             <h3 className="font-serif text-[18px] font-bold text-[#262626] pb-3 border-b border-[#E6DFD5]">
               Đồ Lễ Trong Đơn ({cartItems.length})
             </h3>

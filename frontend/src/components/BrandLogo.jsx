@@ -49,15 +49,15 @@ export default function BrandLogo({ variant = 'light', className = '', customDat
   const firstLetter = (logoText || 'T').trim().charAt(0).toUpperCase();
 
   return (
-    <div className={`flex items-center gap-2.5 select-none transition-transform duration-200 group-hover:scale-[1.02] flex-shrink-0 ${className}`}>
+    <div className={`flex items-center gap-2 sm:gap-2.5 select-none transition-transform duration-200 group-hover:scale-[1.02] flex-shrink-0 ${className}`}>
       {/* Biểu tượng Dấu Triện Son cách điệu */}
       <div
         className={`flex items-center justify-center rounded-[5px] font-bold shadow-xs transition-colors flex-shrink-0 ${
           isAdmin
             ? 'w-8 h-8 text-[14px] bg-[#8B1E21] text-amber-200 border border-amber-500/40'
             : isDark
-            ? 'w-10 h-10 text-[18px] bg-gradient-to-br from-[#8B1E21] to-[#601214] text-[#E5B54F] border border-[#C59B27]/50 shadow-md'
-            : 'w-10 h-10 sm:w-11 sm:h-11 text-[17px] sm:text-[19px] bg-gradient-to-br from-[#8B1E21] to-[#A32427] text-white border-2 border-[#C59B27] shadow-sm'
+            ? 'w-9 h-9 sm:w-10 sm:h-10 text-[16px] sm:text-[18px] bg-gradient-to-br from-[#8B1E21] to-[#601214] text-[#E5B54F] border border-[#C59B27]/50 shadow-md'
+            : 'w-8 h-8 sm:w-11 sm:h-11 text-[15px] sm:text-[19px] bg-gradient-to-br from-[#8B1E21] to-[#A32427] text-white border-2 border-[#C59B27] shadow-sm'
         }`}
         style={{ fontFamily: "'Playfair Display', serif" }}
       >
@@ -66,14 +66,14 @@ export default function BrandLogo({ variant = 'light', className = '', customDat
 
       {/* Khối Typography: Tên thương hiệu + Chữ Highlight + Khẩu hiệu */}
       <div className="flex flex-col justify-center leading-none">
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1 sm:gap-1.5">
           <span
             className={`font-serif tracking-tight font-extrabold uppercase ${
               isAdmin
                 ? 'text-[15px] text-[#8B1E21]'
                 : isDark
-                ? 'text-[20px] sm:text-[22px] text-[#FAF7F2]'
-                : 'text-[20px] sm:text-[23px] text-[#8B1E21]'
+                ? 'text-[18px] sm:text-[22px] text-[#FAF7F2]'
+                : 'text-[17px] sm:text-[23px] text-[#8B1E21]'
             }`}
           >
             {logoText}
@@ -82,7 +82,7 @@ export default function BrandLogo({ variant = 'light', className = '', customDat
           {/* Ô chữ Highlight (Phong cách chữ nổi bật giống CellphoneS) */}
           {logoHighlight && (
             <span
-              className={`px-1.5 py-0.5 rounded-[3px] text-[11px] sm:text-[12px] font-bold tracking-wider uppercase flex items-center justify-center ${
+              className={`px-1.5 py-0.5 rounded-[3px] text-[10px] sm:text-[12px] font-bold tracking-wider uppercase flex items-center justify-center ${
                 isDark
                   ? 'bg-[#E5B54F] text-[#241712]'
                   : 'bg-[#8B1E21] text-white shadow-xs'
@@ -96,7 +96,7 @@ export default function BrandLogo({ variant = 'light', className = '', customDat
         {/* Tagline / Khẩu hiệu phụ bên dưới */}
         {logoTagline && !isAdmin && (
           <span
-            className={`text-[9.5px] sm:text-[10px] font-sans tracking-[0.18em] uppercase font-semibold mt-1 ${
+            className={`text-[8.5px] sm:text-[10px] font-sans tracking-[0.14em] sm:tracking-[0.18em] uppercase font-semibold mt-0.5 sm:mt-1 ${
               isDark ? 'text-[#C59B27]' : 'text-[#8C6D18]'
             }`}
           >

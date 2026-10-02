@@ -574,9 +574,9 @@ export default function TemplateCustomizerPage() {
             {/* ========================================================
                 CỘT TRÁI (8 CỘT): DANH SÁCH LINH PHẨM, GHI CHÚ, UPLOAD ẢNH
                ======================================================== */}
-            <div className="lg:col-span-8 space-y-7">
+            <div className="lg:col-span-8 space-y-6 sm:space-y-7">
               {/* 1. KHỐI THÀNH PHẦN LINH PHẨM */}
-              <div className="bg-white border border-[#E6DFD5] rounded-2xl shadow-antique-card p-5 sm:p-7 space-y-5">
+              <div className="bg-white border border-[#E6DFD5] rounded-2xl shadow-antique-card p-4 sm:p-6 lg:p-7 space-y-5">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-4 border-b border-[#E6DFD5] gap-3">
                   <div>
                     <div className="flex items-center gap-2">
@@ -733,7 +733,7 @@ export default function TemplateCustomizerPage() {
                           </div>
 
                           {/* Bộ Tăng Giảm Số Lượng / Nút Chọn Lại */}
-                          <div className="flex items-center gap-3 sm:self-center pl-8 sm:pl-0">
+                          <div className="flex items-center justify-between sm:justify-end gap-2.5 sm:gap-3 w-full sm:w-auto pt-2 sm:pt-0 border-t sm:border-t-0 border-gray-100">
                             {item.selected ? (
                               <div className="flex items-center gap-2">
                                 <div className="flex items-center border border-[#D5CCC1] rounded-xl bg-white overflow-hidden shadow-2xs">
@@ -803,7 +803,7 @@ export default function TemplateCustomizerPage() {
               </div>
 
               {/* 2. GHI CHÚ CHUNG & YÊU CẦU ĐẶC BIỆT */}
-              <div className="bg-white border border-[#E6DFD5] rounded-2xl shadow-antique-card p-5 sm:p-7 space-y-3.5">
+              <div className="bg-white border border-[#E6DFD5] rounded-2xl shadow-antique-card p-4 sm:p-6 lg:p-7 space-y-3.5">
                 <div className="flex items-center gap-2">
                   <FileText className="w-5 h-5 text-[#8B1E21]" />
                   <h2 className="font-serif text-lg sm:text-xl font-bold text-[#262626]">
@@ -842,7 +842,7 @@ export default function TemplateCustomizerPage() {
               </div>
 
               {/* 3. UPLOAD HÌNH ẢNH THAM KHẢO / BẢN VẼ / ẢNH MẪU */}
-              <div className="bg-white border border-[#E6DFD5] rounded-2xl shadow-antique-card p-5 sm:p-7 space-y-3.5">
+              <div className="bg-white border border-[#E6DFD5] rounded-2xl shadow-antique-card p-4 sm:p-6 lg:p-7 space-y-3.5">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <ImageIcon className="w-5 h-5 text-[#8B1E21]" />
@@ -915,8 +915,8 @@ export default function TemplateCustomizerPage() {
             {/* ========================================================
                 CỘT PHẢI (4 CỘT): HỒ SƠ BÁO GIÁ STICKY TỪ XƯỞNG
                ======================================================== */}
-            <div className="lg:col-span-4 sticky top-20 space-y-5">
-              <div className="bg-white border-2 border-[#C59B27] rounded-2xl p-5 sm:p-6 shadow-xl space-y-4">
+            <div className="lg:col-span-4 lg:sticky lg:top-20 space-y-5">
+              <div className="bg-white border-2 border-[#C59B27] rounded-2xl p-4 sm:p-6 shadow-xl space-y-4">
                 {/* Header Profile */}
                 <div className="text-center pb-4 border-b border-[#E6DFD5] space-y-1">
                   <span className="inline-block bg-[#8B1E21] text-white text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-xs">

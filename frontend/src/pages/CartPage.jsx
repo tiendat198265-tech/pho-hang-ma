@@ -70,7 +70,7 @@ export default function CartPage() {
   }
 
   return (
-    <div className="w-full bg-[#FAF7F2] min-h-screen py-10">
+    <div className="w-full bg-[#FAF7F2] min-h-screen py-6 sm:py-10">
       <div className="max-w-[1200px] mx-auto px-4">
         {/* Header */}
         <div className="border-b border-[#E6DFD5] pb-4 mb-8 flex justify-between items-end">
@@ -88,9 +88,9 @@ export default function CartPage() {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
           {/* Cart Items List */}
-          <div className="lg:col-span-8 bg-white border border-[#E6DFD5] rounded-[4px] p-6 shadow-antique-card">
+          <div className="lg:col-span-8 bg-white border border-[#E6DFD5] rounded-[4px] p-4 sm:p-6 shadow-antique-card">
             <div className="divide-y divide-[#E6DFD5]">
               {cartItems.map((item) => (
                 <div key={item.productId} className="py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -117,34 +117,34 @@ export default function CartPage() {
                   </div>
 
                   {/* Quantity & Delete */}
-                  <div className="flex items-center gap-5">
+                  <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-5 w-full sm:w-auto mt-2 sm:mt-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-gray-100">
                     <div className="flex items-center border border-[#D5CCC1] rounded-[3px] bg-[#FAF7F2] overflow-hidden">
                       <button
                         onClick={() => updateQuantity(item.productId, item.quantity - 1)}
-                        className="w-8 h-8 flex items-center justify-center text-[#262626] hover:bg-white"
+                        className="w-8 h-8 flex items-center justify-center text-[#262626] hover:bg-white text-sm font-bold"
                       >
                         -
                       </button>
-                      <span className="w-10 text-center font-bold text-[14px] text-[#8B1E21]">
+                      <span className="w-9 text-center font-bold text-[14px] text-[#8B1E21]">
                         {item.quantity}
                       </span>
                       <button
                         onClick={() => updateQuantity(item.productId, item.quantity + 1)}
-                        className="w-8 h-8 flex items-center justify-center text-[#262626] hover:bg-white"
+                        className="w-8 h-8 flex items-center justify-center text-[#262626] hover:bg-white text-sm font-bold"
                       >
                         +
                       </button>
                     </div>
 
-                    <div className="text-right min-w-[100px]">
-                      <div className="text-[15px] font-bold text-[#8B1E21]">
+                    <div className="text-right sm:min-w-[100px]">
+                      <div className="text-[15px] font-bold text-[#8B1E21] whitespace-nowrap">
                         {Number(item.price * item.quantity).toLocaleString('vi-VN')} đ
                       </div>
                     </div>
 
                     <button
                       onClick={() => removeFromCart(item.productId)}
-                      className="text-gray-400 hover:text-red-600 p-1"
+                      className="text-gray-400 hover:text-red-600 p-1.5 rounded transition-colors"
                       title="Xóa khỏi giỏ"
                     >
                       <Trash2 size={16} />
@@ -162,7 +162,7 @@ export default function CartPage() {
           </div>
 
           {/* Checkout Summary Box */}
-          <div className="lg:col-span-4 bg-white border-2 border-[#C59B27] p-6 rounded-[4px] shadow-antique-card space-y-4">
+          <div className="lg:col-span-4 bg-white border-2 border-[#C59B27] p-4 sm:p-6 rounded-[4px] shadow-antique-card space-y-4">
             <h3 className="font-serif text-[18px] font-bold text-[#262626] pb-3 border-b border-[#E6DFD5]">
               Tóm Tắt Đơn Hàng
             </h3>

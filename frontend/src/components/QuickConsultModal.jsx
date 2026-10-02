@@ -110,22 +110,22 @@ export default function QuickConsultModal() {
 
       {/* 2. MODAL FORM ĐỂ LẠI THÔNG TIN */}
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
           <div
-            className="bg-[#FAF7F2] w-full max-w-md rounded-xl shadow-2xl border-2 border-[#C59B27] overflow-hidden relative animate-scaleUp"
+            className="bg-[#FAF7F2] w-full max-w-md rounded-xl shadow-2xl border-2 border-[#C59B27] overflow-hidden relative animate-scaleUp max-h-[92vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header Modal */}
-            <div className="bg-[#8B1E21] text-white p-4 sm:p-5 flex items-center justify-between">
+            <div className="bg-[#8B1E21] text-white p-3.5 sm:p-5 flex items-center justify-between shrink-0">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-full bg-amber-400 text-stone-900 flex items-center justify-center flex-shrink-0">
                   <Phone size={16} />
                 </div>
                 <div>
-                  <h3 className="font-serif text-lg font-bold leading-tight text-amber-200">
+                  <h3 className="font-serif text-base sm:text-lg font-bold leading-tight text-amber-200">
                     Đăng Ký Tư Vấn Đàn Lễ
                   </h3>
-                  <p className="text-[11px] text-amber-100/80">
+                  <p className="text-[10.5px] sm:text-[11px] text-amber-100/80">
                     Nghệ nhân Thợ Cả Hàng Mã sẽ gọi lại chu tất
                   </p>
                 </div>
@@ -139,7 +139,7 @@ export default function QuickConsultModal() {
             </div>
 
             {/* Body Modal */}
-            <div className="p-5 sm:p-6">
+            <div className="p-4 sm:p-6 overflow-y-auto custom-scrollbar flex-1">
               {success ? (
                 <div className="text-center py-6 space-y-3">
                   <div className="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">

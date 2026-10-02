@@ -57,22 +57,22 @@ export default function ProductCard({ product }) {
           )}
         </div>
 
-        <div className="pt-3 mt-3 border-t border-[#E6DFD5] flex items-center justify-between">
-          <div>
-            <div className="text-[16px] font-semibold text-[#8B1E21]">
+        <div className="pt-3 mt-3 border-t border-[#E6DFD5] flex items-center justify-between gap-1.5 flex-wrap sm:flex-nowrap">
+          <div className="min-w-0">
+            <div className="text-[15px] sm:text-[16px] font-semibold text-[#8B1E21] whitespace-nowrap">
               {formattedPrice} <span className="text-[13px] font-normal underline">đ</span>
             </div>
             {formattedOrigPrice && (
-              <div className="text-[12px] text-[#A89F91] line-through">
+              <div className="text-[11.5px] sm:text-[12px] text-[#A89F91] line-through whitespace-nowrap">
                 {formattedOrigPrice} đ
               </div>
             )}
           </div>
 
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 shrink-0">
             <Link
               to={`/san-pham/${product.slug}`}
-              className="px-2.5 py-1.5 border border-[#E6DFD5] rounded-[3px] text-[12px] font-medium text-[#3E2723] hover:bg-[#F9F4E8] hover:text-[#8B1E21] hover:border-[#8B1E21] transition-colors"
+              className="px-2.5 py-1.5 border border-[#E6DFD5] rounded-[3px] text-[11.5px] sm:text-[12px] font-medium text-[#3E2723] hover:bg-[#F9F4E8] hover:text-[#8B1E21] hover:border-[#8B1E21] transition-colors whitespace-nowrap"
             >
               <span>Chi tiết</span>
             </Link>

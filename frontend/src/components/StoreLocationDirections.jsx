@@ -216,7 +216,7 @@ export default function StoreLocationDirections({ variant = 'card', className = 
   // --- 2. VARIANT CARD: KHỐI VỊ TRÍ & CHỈ ĐƯỜNG TO LỚN, ĐẲNG CẤP, KÈM BẢN ĐỒ GOOGLE MAPS TƯƠNG TÁC ---
   return (
     <div
-      className={`bg-white border border-[#E6DFD5] rounded-2xl shadow-antique-card p-5 sm:p-7 relative overflow-hidden ${className}`}
+      className={`bg-white border border-[#E6DFD5] rounded-2xl shadow-antique-card p-4 sm:p-6 lg:p-7 relative overflow-hidden ${className}`}
     >
       {/* Họa tiết trang trí góc mạ vàng đồng Di sản */}
       <div className="absolute top-0 right-0 w-44 h-44 bg-gradient-to-bl from-[#C59B27]/12 via-[#C59B27]/5 to-transparent pointer-events-none rounded-bl-full" />
@@ -433,7 +433,7 @@ export default function StoreLocationDirections({ variant = 'card', className = 
             CỘT PHẢI: BẢN ĐỒ GOOGLE MAPS TƯƠNG TÁC THỜI GIAN THỰC
            ======================================================== */}
         <div className="lg:col-span-6 flex flex-col">
-          <div className="relative w-full h-[360px] sm:h-[420px] lg:h-full min-h-[380px] rounded-2xl overflow-hidden border border-[#E6DFD5] shadow-lg bg-gray-100 flex flex-col">
+          <div className="relative w-full h-[280px] sm:h-[360px] lg:h-full min-h-[260px] sm:min-h-[360px] rounded-2xl overflow-hidden border border-[#E6DFD5] shadow-lg bg-gray-100 flex flex-col">
             {/* Iframe Google Maps tương tác */}
             <iframe
               title="Bản đồ vị trí xưởng Tuyết Mã"

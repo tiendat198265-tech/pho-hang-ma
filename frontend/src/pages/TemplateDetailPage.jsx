@@ -58,10 +58,10 @@ export default function TemplateDetailPage() {
   }
 
   return (
-    <div className="w-full bg-[#FAF7F2] py-10 min-h-screen">
+    <div className="w-full bg-[#FAF7F2] py-6 sm:py-10 min-h-screen">
       <div className="max-w-[1320px] mx-auto px-4">
         {/* Breadcrumb */}
-        <div className="text-[13px] text-[#584140] mb-6 flex items-center gap-2">
+        <div className="text-xs sm:text-[13px] text-[#584140] mb-5 sm:mb-6 flex items-center gap-1.5 sm:gap-2 flex-wrap">
           <Link to="/" className="hover:text-[#8B1E21]">Trang Chủ</Link>
           <span>/</span>
           <Link to="/bo-mau" className="hover:text-[#8B1E21]">Bộ Mẫu Hàng Mã</Link>
@@ -70,7 +70,7 @@ export default function TemplateDetailPage() {
         </div>
 
         {/* Top Info Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 bg-white border border-[#E6DFD5] p-6 lg:p-8 rounded-[4px] shadow-antique-card">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 bg-white border border-[#E6DFD5] p-4 sm:p-6 lg:p-8 rounded-[4px] shadow-antique-card">
           {/* Gallery Col */}
           <div className="lg:col-span-6 space-y-4">
             {(() => {

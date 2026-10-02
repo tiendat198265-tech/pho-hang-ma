@@ -128,17 +128,17 @@ export default function Navbar() {
   return (
     <header className="w-full bg-[#FAF7F2] border-b border-[#E6DFD5] sticky top-0 z-50 shadow-sticky-nav">
       {/* 1. TOP ANNOUNCEMENT BAR */}
-      <div className="bg-[#3E2723] text-[#FAF7F2] text-[12px] py-1.5 px-4">
-        <div className="max-w-[1320px] mx-auto flex flex-col sm:flex-row justify-between items-center gap-1">
-          <div className="flex items-center gap-2">
-            <span className="seal-badge !bg-amber-300 !text-black !border-amber-400 font-bold text-[10px] py-0.5">
+      <div className="bg-[#3E2723] text-[#FAF7F2] text-[11px] sm:text-[12px] py-1.5 px-3 sm:px-4">
+        <div className="max-w-[1320px] mx-auto flex flex-col sm:flex-row justify-between items-center gap-1 text-center sm:text-left">
+          <div className="flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 flex-wrap">
+            <span className="seal-badge !bg-amber-300 !text-black !border-amber-400 font-bold text-[9px] sm:text-[10px] py-0.5">
               NGHỆ NHÂN HÀ NỘI
             </span>
-            <span className="font-light tracking-wide">
-              Xưởng thủ công truyền thống Hàng Mã · Giao hàng bằng xe mui kín chuyên dụng
+            <span className="font-light tracking-wide text-[10.5px] sm:text-[12px]">
+              Xưởng thủ công truyền thống Hàng Mã · Giao xe mui kín chuyên dụng
             </span>
           </div>
-          <div className="flex items-center gap-4 text-[11px] text-white font-medium">
+          <div className="flex items-center gap-4 text-[11px] text-white font-medium shrink-0">
             <a href="tel:0396163773" className="flex items-center gap-1 hover:underline">
               <Phone size={12} /> Hotline Thợ Cả: <strong>0396.163.773</strong>
             </a>
@@ -147,9 +147,9 @@ export default function Navbar() {
       </div>
 
       {/* 2. MAIN BRAND HEADER */}
-      <div className="max-w-[1320px] mx-auto px-4 py-3.5 flex items-center justify-between gap-4">
+      <div className="max-w-[1320px] mx-auto px-3 sm:px-4 py-2.5 sm:py-3.5 flex items-center justify-between gap-2 sm:gap-4">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2.5 flex-shrink-0 group py-0.5" title="Về trang chủ">
+        <Link to="/" className="flex items-center gap-2 sm:gap-2.5 flex-shrink-0 group py-0.5" title="Về trang chủ">
           <BrandLogo variant="light" />
         </Link>
 
@@ -302,7 +302,7 @@ export default function Navbar() {
         </div>
 
         {/* Right Actions */}
-        <div className="flex items-center gap-3 md:gap-5">
+        <div className="flex items-center gap-2 sm:gap-3 md:gap-5 shrink-0">
           {/* Notifications Bell */}
           <NotificationBell />
 
@@ -518,7 +518,7 @@ export default function Navbar() {
 
       {/* MOBILE DRAWER */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-white border-t border-[#E6DFD5] px-4 py-3 space-y-3 animate-drawer-down">
+        <div className="lg:hidden bg-white border-t border-[#E6DFD5] px-4 py-3 space-y-3 animate-drawer-down max-h-[82vh] overflow-y-auto custom-scrollbar">
           <div ref={mobileSearchRef} className="relative">
             <form onSubmit={handleSearch} className="relative">
               <input

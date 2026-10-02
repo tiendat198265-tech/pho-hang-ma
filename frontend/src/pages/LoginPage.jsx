@@ -47,11 +47,11 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="w-full bg-[#FAF7F2] min-h-[75vh] py-14 flex items-center justify-center">
-      <div className="max-w-md w-full mx-4 bg-white border border-[#E6DFD5] p-8 rounded-[4px] shadow-antique-card">
+    <div className="w-full bg-[#FAF7F2] min-h-[75vh] py-8 sm:py-14 flex items-center justify-center">
+      <div className="max-w-md w-full mx-3 sm:mx-4 bg-white border border-[#E6DFD5] p-5 sm:p-8 rounded-[4px] shadow-antique-card">
         <div className="text-center mb-6">
           <span className="seal-badge mb-2">HỆ THỐNG XÁC THỰC RBAC</span>
-          <h1 className="font-serif text-[26px] font-bold text-[#262626]">
+          <h1 className="font-serif text-[22px] sm:text-[26px] font-bold text-[#262626]">
             Đăng Nhập Tài Khoản
           </h1>
           <p className="text-[13px] text-[#584140] mt-1">
