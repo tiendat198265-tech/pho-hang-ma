@@ -24,6 +24,12 @@ export default function ProductDetailPage() {
   };
 
   useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, [slug]);
+
+  useEffect(() => {
     const fetchProduct = async () => {
       try {
         const res = await fetch(`/api/products/${slug}`);

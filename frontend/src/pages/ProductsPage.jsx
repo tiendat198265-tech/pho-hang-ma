@@ -57,6 +57,12 @@ export default function ProductsPage() {
     fetchProducts();
   }, [categoryParam, searchParam, sort, pageParam]);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, [categoryParam, searchParam]);
+
   const handleCategorySelect = (slug) => {
     if (slug) {
       searchParams.set('category', slug);

@@ -10,6 +10,7 @@ import Footer from './components/Footer';
 import QuickConsultModal from './components/QuickConsultModal';
 import ZaloFloatingButton from './components/ZaloFloatingButton';
 import ToastContainer from './components/ToastContainer';
+import ScrollToTop from './components/ScrollToTop';
 import { useAntiDevTools } from './hooks/useAntiDevTools';
 
 // Home page loaded directly for fast first contentful paint
@@ -51,6 +52,7 @@ export default function App() {
       <SettingsProvider>
         <NotificationProvider>
           <Router>
+            <ScrollToTop />
             <CartProvider>
               <div className="flex flex-col min-h-screen bg-[#FAF7F2]">
                 <Navbar />
