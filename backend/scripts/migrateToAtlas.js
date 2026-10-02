@@ -39,14 +39,36 @@ async function migrate() {
         continue;
       }
 
-      // Convert raw string dates / ObjectIds
-      const parsedDocs = data.map((doc) => {
-        const item = { ...doc };
-        if (item._id && typeof item._id === 'string' && item._id.length === 24) {
-          try { item._id = new mongoose.Types.ObjectId(item._id); } catch (e) {}
+      // Recursive helper to restore ObjectIds and Dates
+      const restoreTypes = (val) => {
+        if (!val || typeof val !== 'object') {
+          if (typeof val === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(val)) {
+            const d = new Date(val);
+            if (!isNaN(d.getTime())) return d;
+          }
+          return val;
         }
-        return item;
-      });
+        if (Array.isArray(val)) {
+          return val.map(restoreTypes);
+        }
+        const obj = {};
+        for (const [k, v] of Object.entries(val)) {
+          if (
+            (k === '_id' || k.endsWith('Id') || k === 'category' || k === 'parent' || k === 'user') &&
+            typeof v === 'string' &&
+            /^[0-9a-fA-F]{24}$/.test(v)
+          ) {
+            try {
+              obj[k] = new mongoose.Types.ObjectId(v);
+              continue;
+            } catch (e) {}
+          }
+          obj[k] = restoreTypes(v);
+        }
+        return obj;
+      };
+
+      const parsedDocs = data.map(restoreTypes);
 
       const col = mongoose.connection.db.collection(colName);
       
