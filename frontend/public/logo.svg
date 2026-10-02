@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 60" width="240" height="60" fill="none">
+  <!-- Dấu ấn triện son truyền thống -->
+  <rect x="4" y="6" width="48" height="48" rx="3" stroke="#8B1E21" stroke-width="2.5" fill="#8B1E21"/>
+  <!-- Họa tiết triện cổ hoa văn kỷ hà bên trong -->
+  <rect x="8" y="10" width="40" height="40" rx="1.5" stroke="#FAF7F2" stroke-width="1.2" fill="none"/>
+  <!-- Chữ Triện cách điệu chữ MÃ / HOA VĂN ĐÈN LỒNG THỦ CÔNG -->
+  <path d="M28 14 V46 M18 22 H38 M16 32 H40 M20 40 H36 M28 22 L20 30 M28 22 L36 30" stroke="#FAF7F2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Tên thương hiệu PHỐ HÀNG MÃ -->
+  <text x="64" y="32" font-family="'Playfair Display', serif, 'Times New Roman'" font-size="22" font-weight="700" fill="#2B1D16" letter-spacing="1.2">PHỐ HÀNG MÃ</text>
+  <!-- Tagline tiếng Việt trang nhã -->
+  <text x="65" y="47" font-family="'Be Vietnam Pro', sans-serif" font-size="10.5" font-weight="500" fill="#8B1E21" letter-spacing="2">ĐỒ LỄ TRUYỀN THỐNG · TẬN TÂM</text>
+</svg>

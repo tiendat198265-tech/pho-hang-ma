@@ -1,0 +1,140 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body {
+    margin: 0;
+    padding: 0;
+    background-color: #FAF7F2;
+    color: #1b1c1c;
+    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  .font-serif {
+    font-family: 'Playfair Display', serif;
+  }
+  
+  /* Clear numbers & modern tabular figures */
+  .font-sans, input, select, button, table {
+    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  /* Custom subtle scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #FAF7F2;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #E6DFD5;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #C59B27;
+  }
+}
+
+.seal-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #C59B27;
+  background-color: #F9F4E8;
+  color: #8B1E21;
+  font-family: 'Inter', Roboto, Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 3px 8px;
+  border-radius: 3px;
+}
+
+.btn-primary {
+  background-color: #8B1E21;
+  color: #FAF7F2;
+  border: 1px solid #5E1315;
+  border-radius: 4px;
+  font-family: 'Inter', Roboto, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  padding: 10px 20px;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.btn-primary:hover {
+  background-color: #9E2A2B;
+  box-shadow: 0 2px 8px rgba(139, 30, 33, 0.25);
+}
+.btn-primary:active {
+  background-color: #5E1315;
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: #3E2723;
+  border: 1px solid #C59B27;
+  border-radius: 4px;
+  font-family: 'Inter', Roboto, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 10px 20px;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.btn-secondary:hover {
+  background-color: #F9F4E8;
+  color: #8B1E21;
+  border-color: #8B1E21;
+}
+
+.card-frame {
+  background-color: #FFFFFF;
+  border: 1px solid #E6DFD5;
+  border-radius: 4px;
+  transition: all 0.25s ease;
+}
+.card-frame:hover {
+  border-color: #C59B27;
+  box-shadow: 0 4px 16px -2px rgba(62, 39, 35, 0.06), 0 1px 3px 0 rgba(62, 39, 35, 0.04);
+}
+
+/* Print Styles for Invoices */
+@media print {
+  body {
+    background-color: #FFFFFF !important;
+    color: #111111 !important;
+  }
+  header, nav, footer, .no-print, [class*="consultation"], .btn-primary, .btn-secondary, button {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+  .printable-invoice {
+    border: 1px solid #333333 !important;
+    box-shadow: none !important;
+    padding: 24px !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    background: #FFFFFF !important;
+  }
+}
+@media screen {
+  .print-only {
+    display: none;
+  }
+}
+
