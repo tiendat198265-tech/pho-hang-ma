@@ -41,3 +41,5 @@ analyze_screens.js
 extract_tailwind.js
 stitch_*
 test_workflow.js
+.vercel/
+

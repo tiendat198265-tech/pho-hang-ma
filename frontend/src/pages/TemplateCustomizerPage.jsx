@@ -122,7 +122,7 @@ export default function TemplateCustomizerPage() {
                 item.image ||
                 item.productId?.thumbnail ||
                 item.productId?.images?.[0] ||
-                'https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=600&q=80',
+                'https://images.unsplash.com/photo-1582650625119-3a31f8fa2699?auto=format&fit=crop&w=600&q=80',
               unit: item.productId?.unit || 'bộ',
               unitPrice: item.productId?.price || 0,
               quantity: item.defaultQuantity || 1,
@@ -143,7 +143,7 @@ export default function TemplateCustomizerPage() {
                 productId: null,
                 productName: 'Ngựa Đại Ngũ Sắc',
                 sku: 'HM-NGUA-DAI',
-                thumbnail: 'https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=600&q=80',
+                thumbnail: 'https://images.unsplash.com/photo-1582650625119-3a31f8fa2699?auto=format&fit=crop&w=600&q=80',
                 unit: 'ông',
                 unitPrice: 0,
                 quantity: 1,
@@ -186,7 +186,7 @@ export default function TemplateCustomizerPage() {
           item.image ||
           item.productId?.thumbnail ||
           item.productId?.images?.[0] ||
-          'https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=600&q=80',
+          'https://images.unsplash.com/photo-1582650625119-3a31f8fa2699?auto=format&fit=crop&w=600&q=80',
         unit: item.productId?.unit || 'bộ',
         unitPrice: item.productId?.price || 0,
         quantity: item.defaultQuantity || 1,
@@ -309,7 +309,7 @@ export default function TemplateCustomizerPage() {
       sku: '',
       thumbnail:
         customItemForm.image ||
-        'https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=600&q=80',
+        'https://images.unsplash.com/photo-1582650625119-3a31f8fa2699?auto=format&fit=crop&w=600&q=80',
       customImage: customItemForm.image || '',
       unit: customItemForm.unit?.trim() || 'chiếc',
       unitPrice: 0,
@@ -1169,7 +1169,7 @@ export default function TemplateCustomizerPage() {
                             src={
                               prod.thumbnail ||
                               prod.images?.[0] ||
-                              'https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=120&q=80'
+                              'https://images.unsplash.com/photo-1582650625119-3a31f8fa2699?auto=format&fit=crop&w=120&q=80'
                             }
                             alt={prod.name}
                             className="w-14 h-14 rounded-xl object-cover border border-[#E6DFD5] bg-gray-100 shrink-0"

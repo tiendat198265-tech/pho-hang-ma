@@ -70,78 +70,72 @@ export default function HomePage() {
     return () => clearInterval(interval);
   }, [heroBanners.length, isPaused]);
 
-  const activeBanner = heroBanners[currentSlide] || {
-    title: 'Đặt Bộ Mẫu Đàn Tràng – Tiết Kiệm Đến 25%',
-    subtitle: 'Di Sản Thủ Công Thăng Long · Chuẩn Khoa Nghi Cổ',
-    description:
-      'Tuyển tập các bộ mẫu đàn tràng quy chuẩn: Đàn Tứ Phủ, Lễ Tiết Bốn Mùa, Lễ Gia Tiên Bản Thổ. Được chế tác kỳ công bởi nghệ nhân phố Hàng Mã bằng nan giang già và giấy dó cổ truyền, giao hàng an tâm bằng xe mui kín chuyên biệt.',
-    imageUrl:
-      'https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=1000&q=80',
-    linkUrl: '/bo-mau',
-    linkText: 'Xem Các Bộ Mẫu Chuẩn',
-    secondaryLinkUrl: '/tuy-chinh-mau/dan-tu-phu',
-    secondaryLinkText: 'Tùy Biến Đàn Tứ Phủ',
-    badge: 'MẪU NỔI BẬT NĂM NAY',
-    cardTitle: 'Trọn Bộ Đàn Tứ Phủ Thượng Hạng',
-    cardSubtitle: '5 Ngựa Ngũ Sắc · Thuyền Rồng · Mão Châu Sa · Nàng Chầu',
-    cardPriceNote: 'Báo giá trực tiếp theo cấu hình',
-  };
+  const activeBanner = heroBanners[currentSlide] || null;
 
   return (
     <div className="w-full bg-[#FAF7F2] min-h-screen">
       {/* 1. HERO SLIDER SECTION (TRÀN VIỀN - TỐI GIẢN - TÔN VINH ẢNH BANNER NGUYÊN BẢN) */}
-      <section
-        className="w-full relative overflow-hidden bg-[#1E120D] transition-all duration-700 select-none group"
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
-      >
-        <BannerDisplay
-          banner={activeBanner}
-          isInteractive={false}
-          isLivePreview={false}
-        />
+      {loading ? (
+        <section className="w-full h-[420px] sm:h-[520px] lg:h-[630px] bg-[#1E120D] relative overflow-hidden flex items-center justify-center select-none">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse" />
+          <div className="relative z-10 flex flex-col items-center gap-3">
+            <div className="w-8 h-8 rounded-full border-2 border-[#C59B27] border-t-transparent animate-spin" />
+          </div>
+        </section>
+      ) : heroBanners.length > 0 && activeBanner ? (
+        <section
+          className="w-full relative overflow-hidden bg-[#1E120D] transition-all duration-700 select-none group"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
+          <BannerDisplay
+            banner={activeBanner}
+            isInteractive={false}
+            isLivePreview={false}
+          />
 
-        {/* Floating Left/Right Arrows on Screen Edges */}
-        {heroBanners.length > 1 && (
-          <>
-            <button
-              onClick={() =>
-                setCurrentSlide((prev) => (prev === 0 ? heroBanners.length - 1 : prev - 1))
-              }
-              className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-black/40 hover:bg-[#8B1E21] text-white border border-white/20 backdrop-blur-md flex items-center justify-center transition-all hover:scale-110 shadow-2xl"
-              title="Banner trước"
-              aria-label="Previous slide"
-            >
-              <ChevronLeft size={22} />
-            </button>
+          {/* Floating Left/Right Arrows on Screen Edges */}
+          {heroBanners.length > 1 && (
+            <>
+              <button
+                onClick={() =>
+                  setCurrentSlide((prev) => (prev === 0 ? heroBanners.length - 1 : prev - 1))
+                }
+                className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-black/40 hover:bg-[#8B1E21] text-white border border-white/20 backdrop-blur-md flex items-center justify-center transition-all hover:scale-110 shadow-2xl"
+                title="Banner trước"
+                aria-label="Previous slide"
+              >
+                <ChevronLeft size={22} />
+              </button>
 
-            <button
-              onClick={() => setCurrentSlide((prev) => (prev + 1) % heroBanners.length)}
-              className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-black/40 hover:bg-[#8B1E21] text-white border border-white/20 backdrop-blur-md flex items-center justify-center transition-all hover:scale-110 shadow-2xl"
-              title="Banner tiếp"
-              aria-label="Next slide"
-            >
-              <ChevronRight size={22} />
-            </button>
+              <button
+                onClick={() => setCurrentSlide((prev) => (prev + 1) % heroBanners.length)}
+                className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-black/40 hover:bg-[#8B1E21] text-white border border-white/20 backdrop-blur-md flex items-center justify-center transition-all hover:scale-110 shadow-2xl"
+                title="Banner tiếp"
+                aria-label="Next slide"
+              >
+                <ChevronRight size={22} />
+              </button>
 
-            {/* Bottom Slider Indicators */}
-            <div className="absolute bottom-5 sm:bottom-7 inset-x-0 z-30 flex items-center justify-center gap-2.5">
-              {heroBanners.map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setCurrentSlide(idx)}
-                  className={`h-2 transition-all duration-300 rounded-full ${
-                    currentSlide === idx
-                      ? 'w-10 sm:w-12 bg-[#C59B27] shadow-lg'
-                      : 'w-2.5 bg-white/40 hover:bg-white/70'
-                  }`}
-                  aria-label={`Chuyển đến Slide ${idx + 1}`}
-                />
-              ))}
-            </div>
-          </>
-        )}
-      </section>
+              {/* Bottom Slider Indicators */}
+              <div className="absolute bottom-5 sm:bottom-7 inset-x-0 z-30 flex items-center justify-center gap-2.5">
+                {heroBanners.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCurrentSlide(idx)}
+                    className={`h-2 transition-all duration-300 rounded-full ${
+                      currentSlide === idx
+                        ? 'w-10 sm:w-12 bg-[#C59B27] shadow-lg'
+                        : 'w-2.5 bg-white/40 hover:bg-white/70'
+                    }`}
+                    aria-label={`Chuyển đến Slide ${idx + 1}`}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+        </section>
+      ) : null}
 
       {/* 2. DANH MỤC SẢN PHẨM TRUYỀN THỐNG */}
       <section className="py-14 border-b border-[#E6DFD5] bg-[#FAF7F2]">
@@ -226,7 +220,7 @@ export default function HomePage() {
                 {/* Image Container with 0.5rem inset */}
                 <div className="p-2 bg-[#FAF7F2] relative overflow-hidden aspect-[4/3]">
                   <img
-                    src={tpl.thumbnail || 'https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=600&q=80'}
+                    src={tpl.thumbnail || 'https://images.unsplash.com/photo-1582650625119-3a31f8fa2699?auto=format&fit=crop&w=600&q=80'}
                     alt={tpl.name}
                     className="w-full h-full object-cover rounded-[2px] transition-transform duration-300 group-hover:scale-[1.03]"
                     loading="lazy"

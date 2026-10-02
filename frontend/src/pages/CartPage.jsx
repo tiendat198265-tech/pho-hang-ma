@@ -97,7 +97,7 @@ export default function CartPage() {
                   {/* Image & Title */}
                   <div className="flex items-center gap-4 flex-1">
                     <img
-                      src={item.thumbnail || 'https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=120&q=80'}
+                      src={item.thumbnail || 'https://images.unsplash.com/photo-1582650625119-3a31f8fa2699?auto=format&fit=crop&w=120&q=80'}
                       alt={item.name}
                       className="w-16 h-16 rounded object-cover border border-[#E6DFD5] flex-shrink-0"
                     />

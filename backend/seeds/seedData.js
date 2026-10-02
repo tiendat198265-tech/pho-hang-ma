@@ -146,8 +146,8 @@ const seed = async () => {
         details: 'Khung đan bằng nan giang già xứ Bắc, ngoài bọc giấy dó nhuộm phẩm tự nhiên, lưng đóng yên gấm thêu kim tuyến, chân thếp vàng uy phong lẫm liệt.',
         dimensions: 'Cao 1m20 x Dài 90cm',
         material: 'Giấy dó truyền thống, giang cật cổ, phẩm điều Thăng Long',
-        thumbnail: 'https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=600&q=80',
-        images: ['https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=800&q=80'],
+        thumbnail: 'https://images.unsplash.com/photo-1582650625119-3a31f8fa2699?auto=format&fit=crop&w=600&q=80',
+        images: ['https://images.unsplash.com/photo-1582650625119-3a31f8fa2699?auto=format&fit=crop&w=800&q=80'],
         stockQuantity: 20,
       },
       {
@@ -277,9 +277,9 @@ const seed = async () => {
       shortDescription: 'Mẫu đàn thượng hạng đầy đủ Ngũ Phương Ngựa Ngũ Sắc, Thuyền Rồng Bát Hải, Nón Chúa Mão Thần Linh và Hình Nhân Chầu Áo Gấm.',
       description: 'Được thiết kế và cố vấn bởi các nghệ nhân thợ cả phố Hàng Mã lâu năm, bộ mẫu Đàn Tứ Phủ chuẩn mực tuyệt đối theo lối xưa của kinh kỳ Thăng Long. Mọi phối vị từ sắc xanh (Thượng Ngàn), đỏ (Thiên Phủ), trắng (Thoải Phủ) đến vàng (Địa Phủ) đều chuẩn xác theo quy thức đạo lễ.',
       ritualGuide: 'Thích hợp dùng cho các khóa lễ Hầu Thánh, Mở Phủ, Tạ Phủ, Kỳ Yên cầu an đại tự tại các đền, phủ, điện gia thất.',
-      thumbnail: 'https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=800&q=80',
+      thumbnail: 'https://images.unsplash.com/photo-1582650625119-3a31f8fa2699?auto=format&fit=crop&w=800&q=80',
       images: [
-        'https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=800&q=80',
+        'https://images.unsplash.com/photo-1582650625119-3a31f8fa2699?auto=format&fit=crop&w=800&q=80',
         'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80',
         'https://images.unsplash.com/photo-1582562124811-c09040d0a901?auto=format&fit=crop&w=800&q=80',
       ],

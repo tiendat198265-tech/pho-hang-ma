@@ -14,7 +14,7 @@ export default function ProductCard({ product }) {
       {/* Image Container with 0.5rem inset */}
       <div className="p-2 bg-[#FAF7F2] relative overflow-hidden aspect-[4/3]">
         <img
-          src={product.thumbnail || product.images?.[0] || 'https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=600&q=80'}
+          src={product.thumbnail || product.images?.[0] || 'https://images.unsplash.com/photo-1582650625119-3a31f8fa2699?auto=format&fit=crop&w=600&q=80'}
           alt={product.name}
           className="w-full h-full object-cover rounded-[2px] transition-transform duration-300 group-hover:scale-[1.03]"
           loading="lazy"

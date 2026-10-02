@@ -139,7 +139,7 @@ export default function TemplatesPage() {
                   {/* Thumbnail */}
                   <div className="relative aspect-[16/10] overflow-hidden bg-[#FAF7F2]">
                     <img
-                      src={tpl.thumbnail || 'https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=800&q=80'}
+                      src={tpl.thumbnail || 'https://images.unsplash.com/photo-1582650625119-3a31f8fa2699?auto=format&fit=crop&w=800&q=80'}
                       alt={tpl.name}
                       className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                     />

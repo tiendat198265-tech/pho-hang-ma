@@ -97,7 +97,7 @@ export default function ProductDetailPage() {
               title="Rê chuột để soi chi tiết sản phẩm"
             >
               <img
-                src={selectedImage || 'https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=800&q=80'}
+                src={selectedImage || 'https://images.unsplash.com/photo-1582650625119-3a31f8fa2699?auto=format&fit=crop&w=800&q=80'}
                 alt={product.name}
                 className={`w-full h-full object-cover transition-transform duration-150 ease-out pointer-events-none ${
                   isZoomed ? 'scale-[2.4]' : 'scale-100'

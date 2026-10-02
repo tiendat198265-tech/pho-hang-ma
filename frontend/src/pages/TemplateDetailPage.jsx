@@ -72,7 +72,7 @@ export default function TemplateDetailPage() {
                 selectedImage ||
                 template.thumbnail ||
                 template.images?.[0] ||
-                'https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=1000&q=80';
+                'https://images.unsplash.com/photo-1582650625119-3a31f8fa2699?auto=format&fit=crop&w=1000&q=80';
 
               return (
                 <>

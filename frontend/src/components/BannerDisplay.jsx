@@ -52,8 +52,7 @@ export default function BannerDisplay({
   const activeImage =
     device === 'MOBILE' && mobileImageUrl
       ? mobileImageUrl
-      : imageUrl ||
-        'https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=1600&q=80';
+      : imageUrl || '';
 
   // Drag handler for interactive mode
   useEffect(() => {
@@ -229,31 +228,38 @@ export default function BannerDisplay({
             : undefined
         }
       >
-        <picture className="w-full h-full block">
-          {/* Tự động switch ảnh mobile trên màn hình thực tế của khách hàng nếu không ở chế độ giả lập device */}
-          {!isLivePreview && mobileImageUrl && (
-            <source media="(max-width: 768px)" srcSet={mobileImageUrl} />
-          )}
-          <img
-            src={activeImage}
-            alt={title || 'Phố Hàng Mã Banner'}
-            draggable={false}
-            style={{
-              transform: `translate(${positionX}px, ${positionY}px) scale(${zoomX / 100}, ${
-                zoomY / 100
-              })`,
-              transformOrigin: focalPoint || 'center',
-              objectFit: fitMode || 'cover',
-            }}
-            className={`w-full h-full pointer-events-none transition-transform duration-75 select-none ${
-              fitMode === 'contain'
-                ? 'object-contain'
-                : fitMode === 'fill'
-                ? 'object-fill'
-                : 'object-cover'
-            }`}
-          />
-        </picture>
+        {activeImage ? (
+          <picture className="w-full h-full block">
+            {/* Tự động switch ảnh mobile trên màn hình thực tế của khách hàng nếu không ở chế độ giả lập device */}
+            {!isLivePreview && mobileImageUrl && (
+              <source media="(max-width: 768px)" srcSet={mobileImageUrl} />
+            )}
+            <img
+              src={activeImage}
+              alt={title || 'Phố Hàng Mã Banner'}
+              draggable={false}
+              style={{
+                transform: `translate(${positionX}px, ${positionY}px) scale(${zoomX / 100}, ${
+                  zoomY / 100
+                })`,
+                transformOrigin: focalPoint || 'center',
+                objectFit: fitMode || 'cover',
+              }}
+              className={`w-full h-full pointer-events-none transition-transform duration-75 select-none ${
+                fitMode === 'contain'
+                  ? 'object-contain'
+                  : fitMode === 'fill'
+                  ? 'object-fill'
+                  : 'object-cover'
+              }`}
+            />
+          </picture>
+        ) : isInteractive || isLivePreview ? (
+          <div className="flex flex-col items-center justify-center text-white/40 gap-2 p-4 text-center">
+            <span className="text-sm font-light">Chưa có hình ảnh banner</span>
+            <span className="text-xs text-white/30">Vui lòng tải ảnh lên hoặc dán link ảnh</span>
+          </div>
+        ) : null}
       </div>
 
       {/* 3. Lớp phủ Overlay với Opacity tùy chỉnh chính xác */}
