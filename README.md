@@ -6,9 +6,10 @@ Hệ thống thương mại điện tử chuyên biệt cho đồ lễ và vàng
 
 ## 🌐 Liên Kết Production (Trực Tuyến)
 
-* **Trang chủ**: [https://frontend-two-rho-39.vercel.app](https://frontend-two-rho-39.vercel.app)
-* **Đăng nhập**: [https://frontend-two-rho-39.vercel.app/dang-nhap](https://frontend-two-rho-39.vercel.app/dang-nhap)
-* **Bảng điều khiển Quản trị**: [https://frontend-two-rho-39.vercel.app/admin](https://frontend-two-rho-39.vercel.app/admin)
+* **Trang chủ**: [https://tuyetmathuongtin.vercel.app](https://tuyetmathuongtin.vercel.app)
+* **Đăng nhập**: [https://tuyetmathuongtin.vercel.app/dang-nhap](https://tuyetmathuongtin.vercel.app/dang-nhap)
+* **Bảng điều khiển Quản trị**: [https://tuyetmathuongtin.vercel.app/admin](https://tuyetmathuongtin.vercel.app/admin)
+* **Domain phụ (Backup)**: [https://frontend-two-rho-39.vercel.app](https://frontend-two-rho-39.vercel.app)
 * **API Backend**: [https://backend-ashen-six-17.vercel.app](https://backend-ashen-six-17.vercel.app)
 * **Kiểm tra trạng thái API**: [https://backend-ashen-six-17.vercel.app/api/health](https://backend-ashen-six-17.vercel.app/api/health)
 
