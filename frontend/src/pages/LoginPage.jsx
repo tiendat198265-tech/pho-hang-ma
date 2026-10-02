@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { User, Lock, ArrowRight, AlertCircle, Shield } from 'lucide-react';
+import { User, Lock, ArrowRight, AlertCircle } from 'lucide-react';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -43,19 +43,6 @@ export default function LoginPage() {
       setErrorMsg('Lỗi kết nối máy chủ');
     } finally {
       setLoading(false);
-    }
-  };
-
-  const setPresetUser = (role) => {
-    if (role === 'ADMIN') {
-      setEmail('admin@phohangma.vn');
-      setPassword('admin123');
-    } else if (role === 'STAFF') {
-      setEmail('thoca@phohangma.vn');
-      setPassword('thoca123');
-    } else {
-      setEmail('khachhang@gmail.com');
-      setPassword('khach123');
     }
   };
 
@@ -124,37 +111,7 @@ export default function LoginPage() {
           </button>
         </form>
 
-        {/* Demo Fast Login Buttons */}
-        <div className="mt-6 pt-4 border-t border-[#E6DFD5]">
-          <div className="text-[11.5px] font-semibold text-[#8C6D18] uppercase tracking-wider mb-2 text-center">
-            Tài Khoản Phân Quyền Thử Nghiệm:
-          </div>
-          <div className="grid grid-cols-3 gap-2 text-[11.5px]">
-            <button
-              type="button"
-              onClick={() => setPresetUser('ADMIN')}
-              className="p-1.5 border border-[#8B1E21] text-[#8B1E21] rounded hover:bg-[#8B1E21] hover:text-white transition-colors"
-            >
-              Quản Trị Viên
-            </button>
-            <button
-              type="button"
-              onClick={() => setPresetUser('STAFF')}
-              className="p-1.5 border border-[#C59B27] text-[#775a00] rounded hover:bg-[#C59B27] hover:text-white transition-colors"
-            >
-              Thợ Cả Nghệ Nhân
-            </button>
-            <button
-              type="button"
-              onClick={() => setPresetUser('CUSTOMER')}
-              className="p-1.5 border border-[#D5CCC1] text-[#262626] rounded hover:bg-[#FAF7F2] transition-colors"
-            >
-              Khách Hàng
-            </button>
-          </div>
-        </div>
-
-        <div className="mt-5 text-center text-[13px] text-[#584140]">
+        <div className="mt-6 pt-5 border-t border-[#E6DFD5] text-center text-[13.5px] text-[#584140]">
           Chưa có tài khoản?{' '}
           <Link
             to={redirectUrl ? `/dang-ky?redirect=${encodeURIComponent(redirectUrl)}` : '/dang-ky'}
